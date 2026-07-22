@@ -4,8 +4,9 @@
   background-color: var(--background, #ffffff);
 }
 
-.title {
+.brand {
   font-size: 1.25rem;
   font-weight: bold;
   margin: 0;
+  display: inline-block;
 }

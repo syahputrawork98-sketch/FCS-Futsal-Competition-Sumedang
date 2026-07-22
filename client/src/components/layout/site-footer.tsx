@@ -6,7 +6,7 @@ export function SiteFooter() {
   return (
     <footer className={styles.footer}>
       <PageContainer>
-        <p>&copy; {new Date().getFullYear()} {siteConfig.name}</p>
+        <p>{siteConfig.name}</p>
         <p>Aplikasi dalam tahap persiapan teknis.</p>
       </PageContainer>
     </footer>
