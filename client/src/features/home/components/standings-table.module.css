@@ -21,7 +21,7 @@
   text-align: left;
 }
 
-th {
+.table th {
   padding: var(--space-3) var(--space-4);
   font-size: 0.75rem;
   font-weight: 600;
@@ -30,7 +30,7 @@ th {
   border-bottom: 1px solid var(--color-border-light);
 }
 
-td {
+.table td {
   padding: var(--space-3) var(--space-4);
   font-size: 0.875rem;
   border-bottom: 1px solid var(--color-border-light);
@@ -88,12 +88,12 @@ td {
 }
 
 .success {
-  background-color: rgba(var(--color-status-success-rgb), 0.1);
+  background-color: color-mix(in srgb, var(--color-status-success) 10%, transparent);
   color: var(--color-status-success);
 }
 
 .danger {
-  background-color: rgba(var(--color-status-danger-rgb), 0.1);
+  background-color: color-mix(in srgb, var(--color-status-danger) 10%, transparent);
   color: var(--color-status-danger);
 }
 
