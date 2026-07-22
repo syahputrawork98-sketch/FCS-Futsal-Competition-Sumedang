@@ -1,15 +1,12 @@
 import styles from "./gallery-mosaic.module.css";
-import type { HomeGalleryItem } from "../types/home.types";
+import type { HomeGalleryItemWithSource } from "../types/home.types";
 
 type GalleryMosaicProps = {
-  items: HomeGalleryItem[];
+  items: HomeGalleryItemWithSource[];
 };
 
 export function GalleryMosaic({ items }: GalleryMosaicProps) {
-  const validItems = items.filter(
-    (item) => typeof item.image.src === "string" && item.image.src.trim() !== ""
-  );
-  const displayItems = validItems.slice(0, 6);
+  const displayItems = items.slice(0, 6);
 
   return (
     <div className={styles.container}>

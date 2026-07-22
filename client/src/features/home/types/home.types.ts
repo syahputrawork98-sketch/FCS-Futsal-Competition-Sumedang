@@ -88,6 +88,12 @@ export type HomeGalleryItem = {
   image: HomeImageAsset;
 };
 
+export type HomeGalleryItemWithSource = Omit<HomeGalleryItem, "image"> & {
+  image: HomeImageAsset & {
+    src: string;
+  };
+};
+
 export type HomeSponsor = {
   id: string;
   name: string;

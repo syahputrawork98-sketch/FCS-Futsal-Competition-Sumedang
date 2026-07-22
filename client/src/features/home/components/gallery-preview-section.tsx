@@ -5,15 +5,22 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./gallery-preview-section.module.css";
-import type { HomeSectionState, HomeGalleryItem } from "../types/home.types";
+import type { HomeSectionState, HomeGalleryItem, HomeGalleryItemWithSource } from "../types/home.types";
 
 type GalleryPreviewSectionProps = {
   gallery: HomeSectionState<HomeGalleryItem[]>;
 };
 
+function hasValidImageSource(item: HomeGalleryItem): item is HomeGalleryItemWithSource {
+  return (
+    typeof item.image.src === "string" &&
+    item.image.src.trim().length > 0
+  );
+}
+
 export function GalleryPreviewSection({ gallery }: GalleryPreviewSectionProps) {
-  const validItems = gallery.status === "ready" 
-    ? gallery.data.filter((item) => typeof item.image.src === "string" && item.image.src.trim() !== "")
+  const validItems: HomeGalleryItemWithSource[] = gallery.status === "ready" 
+    ? gallery.data.filter(hasValidImageSource)
     : [];
     
   const hasData = gallery.status === "ready" && validItems.length > 0;

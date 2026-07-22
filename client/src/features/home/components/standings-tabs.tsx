@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef } from "react";
 import { StandingsTable } from "./standings-table";
 import styles from "./standings-tabs.module.css";
@@ -18,15 +20,17 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
     let nextTab = activeTab;
 
     if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+      e.preventDefault();
       nextTab = activeTab === "A" ? "B" : "A";
     } else if (e.key === "Home") {
+      e.preventDefault();
       nextTab = "A";
     } else if (e.key === "End") {
+      e.preventDefault();
       nextTab = "B";
     }
 
     if (nextTab !== activeTab) {
-      e.preventDefault();
       setActiveTab(nextTab);
       if (nextTab === "A") {
         tabARef.current?.focus();
@@ -38,7 +42,7 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.tabList} role="tablist" aria-label="Klasemen Grup">
+      <div className={styles.tabs} role="tablist" aria-label="Klasemen Grup">
         <button
           ref={tabARef}
           role="tab"
@@ -46,7 +50,7 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
           aria-controls="panel-a"
           id="tab-a"
           tabIndex={activeTab === "A" ? 0 : -1}
-          className={`${styles.tab} ${activeTab === "A" ? styles.activeTab : ""}`}
+          className={`${styles.tab} ${activeTab === "A" ? styles.active : ""}`}
           onClick={() => setActiveTab("A")}
           onKeyDown={handleKeyDown}
         >
@@ -59,7 +63,7 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
           aria-controls="panel-b"
           id="tab-b"
           tabIndex={activeTab === "B" ? 0 : -1}
-          className={`${styles.tab} ${activeTab === "B" ? styles.activeTab : ""}`}
+          className={`${styles.tab} ${activeTab === "B" ? styles.active : ""}`}
           onClick={() => setActiveTab("B")}
           onKeyDown={handleKeyDown}
         >
@@ -73,7 +77,12 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
         aria-labelledby="tab-a"
         hidden={activeTab !== "A"}
       >
-        {activeTab === "A" && <StandingsTable standings={groupA} />}
+        {activeTab === "A" && (
+          <StandingsTable
+            caption="Klasemen Grup A"
+            standings={groupA}
+          />
+        )}
       </div>
       
       <div
@@ -82,7 +91,12 @@ export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
         aria-labelledby="tab-b"
         hidden={activeTab !== "B"}
       >
-        {activeTab === "B" && <StandingsTable standings={groupB} />}
+        {activeTab === "B" && (
+          <StandingsTable
+            caption="Klasemen Grup B"
+            standings={groupB}
+          />
+        )}
       </div>
     </div>
   );
