@@ -19,7 +19,15 @@ export function DesktopNavigation() {
       }
     };
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpenDropdown(null);
+      if (e.key === "Escape") {
+        setOpenDropdown((prev) => {
+          if (prev !== null) {
+            const toggle = document.getElementById(`dropdown-toggle-${prev}`);
+            toggle?.focus();
+          }
+          return null;
+        });
+      }
     };
 
     document.addEventListener("mousedown", handleOutsideClick);
@@ -50,27 +58,34 @@ export function DesktopNavigation() {
             return (
               <li key={item.label} className={styles.item}>
                 <button
+                  id={`dropdown-toggle-${index}`}
                   type="button"
                   className={`${styles.dropdownToggle} ${isItemActive ? styles.active : ""}`}
                   onClick={() => setOpenDropdown(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={`dropdown-${index}`}
+                  aria-haspopup="true"
                 >
                   {item.label}
                   <ChevronDown size={16} aria-hidden="true" />
                 </button>
                 {isOpen && (
-                  <div id={`dropdown-${index}`} className={styles.dropdownMenu}>
-                    {item.children!.map((child) => (
-                      <Link
-                        key={child.label}
-                        href={child.href}
-                        className={styles.dropdownLink}
-                        onClick={() => setOpenDropdown(null)}
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                  <div id={`dropdown-${index}`} className={styles.dropdownMenu} role="menu" aria-labelledby={`dropdown-toggle-${index}`}>
+                    {item.children!.map((child) => {
+                      const isChildActive = isActive(child.href);
+                      return (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          className={`${styles.dropdownLink} ${isChildActive ? styles.activeChild : ""}`}
+                          aria-current={isChildActive ? "page" : undefined}
+                          role="menuitem"
+                          onClick={() => setOpenDropdown(null)}
+                        >
+                          {child.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
               </li>

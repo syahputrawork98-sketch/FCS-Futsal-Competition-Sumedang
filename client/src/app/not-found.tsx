@@ -1,5 +1,5 @@
 import { PageContainer } from "@/components/layout/page-container/page-container";
-import { SectionHeading } from "@/components/ui/section-heading/section-heading";
+import { ActionLink } from "@/components/ui/action-link/action-link";
 import { StatusBadge } from "@/components/ui/status-badge/status-badge";
 import styles from "./not-found.module.css";
 
@@ -8,13 +8,11 @@ export default function NotFound() {
     <PageContainer>
       <div className={styles.container}>
         <StatusBadge variant="danger">404</StatusBadge>
-        <SectionHeading
-          title="Halaman Tidak Ditemukan"
-          description="Maaf, halaman yang Anda cari tidak tersedia atau sedang dalam pengembangan."
-          actionLabel="Kembali ke Beranda"
-          actionHref="/"
-          alignment="center"
-        />
+        <h1 className={styles.title}>Halaman Tidak Ditemukan</h1>
+        <p className={styles.description}>Maaf, halaman yang Anda cari tidak tersedia atau sedang dalam pengembangan.</p>
+        <div className={styles.actions}>
+          <ActionLink href="/" variant="secondary">Kembali ke Beranda</ActionLink>
+        </div>
       </div>
     </PageContainer>
   );

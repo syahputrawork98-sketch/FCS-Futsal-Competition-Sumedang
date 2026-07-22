@@ -64,3 +64,9 @@
 .dropdownLink:hover, .dropdownLink:focus {
   background-color: var(--color-secondary-surface);
 }
+
+.activeChild {
+  background-color: var(--color-secondary-surface);
+  font-weight: 600;
+  color: var(--color-electric-blue);
+}

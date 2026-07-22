@@ -8,6 +8,7 @@ type ActionLinkProps = {
   size?: "small" | "medium" | "large";
   className?: string;
   ariaLabel?: string;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 };
 
 export function ActionLink({
@@ -17,6 +18,7 @@ export function ActionLink({
   size = "medium",
   className = "",
   ariaLabel,
+  onClick,
 }: ActionLinkProps) {
   const classNames = [
     styles.link,
@@ -26,7 +28,7 @@ export function ActionLink({
   ].filter(Boolean).join(" ");
 
   return (
-    <Link href={href} className={classNames} aria-label={ariaLabel}>
+    <Link href={href} className={classNames} aria-label={ariaLabel} onClick={onClick}>
       {children}
     </Link>
   );

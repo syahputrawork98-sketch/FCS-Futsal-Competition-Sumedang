@@ -12,7 +12,7 @@ export function SiteHeader() {
       <PageContainer>
         <div className={styles.content}>
           <div className={styles.brand}>
-            <SiteBrand inverse />
+            <SiteBrand compact inverse />
           </div>
 
           <div className={styles.desktopNav}>

@@ -15,15 +15,20 @@ export function MobileNavigation() {
   const pathname = usePathname();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
 
   useEffect(() => {
     if (isOpen) {
       document.body.classList.add("navigation-open");
       dialogRef.current?.showModal();
+      wasOpen.current = true;
     } else {
       document.body.classList.remove("navigation-open");
       dialogRef.current?.close();
-      toggleRef.current?.focus();
+      if (wasOpen.current) {
+        toggleRef.current?.focus();
+        wasOpen.current = false;
+      }
     }
     return () => {
       document.body.classList.remove("navigation-open");
@@ -76,7 +81,7 @@ export function MobileNavigation() {
       >
         <div className={styles.drawer}>
           <div className={styles.header}>
-            <SiteBrand inverse />
+            <SiteBrand compact inverse />
             <IconButton label="Tutup menu" onClick={handleCloseClick} inverse>
               <X size={24} aria-hidden="true" />
             </IconButton>
@@ -122,7 +127,7 @@ export function MobileNavigation() {
           </nav>
 
           <div className={styles.footer}>
-            <ActionLink href={headerAction.href} className={styles.cta}>
+            <ActionLink href={headerAction.href} className={styles.cta} onClick={handleCloseClick}>
               {headerAction.label}
             </ActionLink>
           </div>

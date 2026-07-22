@@ -6,12 +6,8 @@ import { siteConfig } from "@/config/site";
 import styles from "./site-footer.module.css";
 
 export function SiteFooter() {
-  const informationLinks = [
-    { label: "Tentang Kompetisi", href: "/tentang" },
-    { label: "Penghargaan", href: "/penghargaan" },
-    { label: "Galeri", href: "/galeri" },
-    { label: "Sponsor dan Mitra", href: "/sponsor" },
-  ];
+  const infoNav = primaryNavigation.find((item) => item.label === "Informasi");
+  const informationLinks = infoNav?.children || [];
 
   return (
     <footer className={styles.footer}>
