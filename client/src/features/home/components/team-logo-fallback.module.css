@@ -1,0 +1,47 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  border-radius: 50%; /* Make it round like a logo */
+  position: relative;
+  flex-shrink: 0;
+}
+
+.icon {
+  position: absolute;
+  opacity: 0.2;
+  width: 70%;
+  height: 70%;
+}
+
+.initial {
+  font-weight: 700;
+  z-index: 1;
+}
+
+/* Sizes */
+.small {
+  width: 32px;
+  height: 32px;
+}
+.small .initial {
+  font-size: 0.875rem;
+}
+
+.medium {
+  width: 48px;
+  height: 48px;
+}
+.medium .initial {
+  font-size: 1.125rem;
+}
+
+.large {
+  width: 64px;
+  height: 64px;
+}
+.large .initial {
+  font-size: 1.5rem;
+}

@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-8);
+  background-color: var(--color-background-primary);
+  border: 1px dashed var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,104 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
+  height: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border-primary);
+}
+
+.phase {
+  font-weight: 700;
+  color: var(--color-brand-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.status {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-semantic-success);
+  background-color: rgba(var(--color-semantic-success-rgb), 0.1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+}
+
+.teams {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  flex: 1;
+}
+
+.team {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 35%;
+  text-align: center;
+}
+
+.logo {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  margin-bottom: var(--space-3);
+}
+
+.teamName {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--color-text-primary);
+}
+
+.scoreContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  width: 30%;
+}
+
+.score {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.divider {
+  font-size: 2rem;
+  font-weight: 300;
+  color: var(--color-text-tertiary);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  .score {
+    font-size: 2.5rem;
+  }
+  .teamName {
+    font-size: 1rem;
+  }
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
+}
