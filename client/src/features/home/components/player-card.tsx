@@ -20,7 +20,9 @@ export function PlayerCard({ player }: PlayerCardProps) {
       
       <div className={styles.details}>
         <h3 className={styles.name}>{player.name}</h3>
-        <p className={styles.team}>{player.teamName}</p>
+        {player.teamName && (
+          <p className={styles.team}>{player.teamName}</p>
+        )}
         
         {player.position && (
           <span className={styles.position}>{player.position}</span>

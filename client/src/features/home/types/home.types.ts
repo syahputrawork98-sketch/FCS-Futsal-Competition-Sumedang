@@ -34,8 +34,8 @@ export type HomePlayer = {
 export type HomeMatch = {
   id: string;
   phase: string;
-  status: string;
-  verificationStatus?: string;
+  status: "Selesai";
+  verificationStatus?: "Resmi";
   date?: string;
   venue?: string;
   homeTeam: HomeTeam;

@@ -12,8 +12,12 @@ type GalleryPreviewSectionProps = {
 };
 
 export function GalleryPreviewSection({ gallery }: GalleryPreviewSectionProps) {
-  // Plan states that Gallery CTA is only visible if there is valid data
-  const hasData = gallery.status === "ready" && gallery.data.length > 0;
+  const validItems = gallery.status === "ready" 
+    ? gallery.data.filter((item) => typeof item.image.src === "string" && item.image.src.trim() !== "")
+    : [];
+    
+  const hasData = gallery.status === "ready" && validItems.length > 0;
+  const showEmptyState = gallery.status === "empty" || (gallery.status === "ready" && validItems.length === 0);
 
   return (
     <section className={styles.section}>
@@ -31,12 +35,12 @@ export function GalleryPreviewSection({ gallery }: GalleryPreviewSectionProps) {
             <HomeErrorState title="Gagal Memuat Galeri" description={gallery.message} />
           )}
 
-          {gallery.status === "empty" && (
+          {showEmptyState && (
             <HomeEmptyState title="Galeri kompetisi belum tersedia." />
           )}
 
           {hasData && (
-            <GalleryMosaic items={gallery.data} />
+            <GalleryMosaic items={validItems} />
           )}
         </div>
       </PageContainer>

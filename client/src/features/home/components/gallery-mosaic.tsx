@@ -6,7 +6,10 @@ type GalleryMosaicProps = {
 };
 
 export function GalleryMosaic({ items }: GalleryMosaicProps) {
-  const displayItems = items.slice(0, 6);
+  const validItems = items.filter(
+    (item) => typeof item.image.src === "string" && item.image.src.trim() !== ""
+  );
+  const displayItems = validItems.slice(0, 6);
 
   return (
     <div className={styles.container}>
