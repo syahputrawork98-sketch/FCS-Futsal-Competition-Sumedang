@@ -1,0 +1,19 @@
+.container {
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+}
+
+.link {
+  color: #0055ff;
+  text-decoration: underline;
+}
