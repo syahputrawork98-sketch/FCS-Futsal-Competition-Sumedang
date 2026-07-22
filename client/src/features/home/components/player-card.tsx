@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PlayerAvatarFallback } from "./player-avatar-fallback";
 import styles from "./player-card.module.css";
-import type { HomePlayer } from "../../types/home.types";
+import type { HomePlayer } from "../types/home.types";
 
 type PlayerCardProps = {
   player: HomePlayer;

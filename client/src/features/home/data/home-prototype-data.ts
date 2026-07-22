@@ -43,6 +43,7 @@ export const homePrototypeData = {
       id: "match-final",
       phase: "Final",
       status: "Selesai",
+      verificationStatus: "Resmi",
       homeTeam: cakraTextile,
       awayTeam: tekmaFutsal,
       homeScore: 2,
@@ -65,6 +66,7 @@ export const homePrototypeData = {
         id: "match-final",
         phase: "Final",
         status: "Selesai",
+        verificationStatus: "Resmi",
         homeTeam: cakraTextile,
         awayTeam: tekmaFutsal,
         homeScore: 2,
@@ -129,8 +131,8 @@ export const homePrototypeData = {
     ] as HomeAward[],
   },
   teams: {
-    status: "ready",
-    data: [cakraTextile, tekmaFutsal],
+    status: "empty",
+    message: "Data seluruh tim peserta belum lengkap (baru tersedia 2 dari 8 tim referensi resmi).",
   },
   players: {
     status: "ready",
@@ -138,8 +140,6 @@ export const homePrototypeData = {
       {
         id: "player-tegar",
         name: "Tegar Mahendra",
-        teamId: "unknown",
-        teamName: "Tim Tidak Diketahui",
         photo: { src: null, alt: "Foto Tegar Mahendra" },
         statistics: { goals: 5, mvp: 3 },
         award: "Pemain Terbaik & Top Scorer",
@@ -147,8 +147,6 @@ export const homePrototypeData = {
       {
         id: "player-agung",
         name: "Agung Firmansyah",
-        teamId: "unknown",
-        teamName: "Tim Tidak Diketahui",
         photo: { src: null, alt: "Foto Agung Firmansyah" },
         statistics: { goals: 5 },
         award: "Top Scorer",
@@ -156,8 +154,6 @@ export const homePrototypeData = {
       {
         id: "player-aldi",
         name: "Aldi Setiawan",
-        teamId: "unknown",
-        teamName: "Tim Tidak Diketahui",
         position: "Kiper",
         photo: { src: null, alt: "Foto Aldi Setiawan" },
         award: "Kiper Terbaik",

@@ -1,11 +1,20 @@
 import styles from "./gallery-mosaic.module.css";
-// import type { HomeGalleryItem } from "../../types/home.types";
+import type { HomeGalleryItem } from "../types/home.types";
 
-// Scaffold for gallery mosaic
-export function GalleryMosaic() {
+type GalleryMosaicProps = {
+  items: HomeGalleryItem[];
+};
+
+export function GalleryMosaic({ items }: GalleryMosaicProps) {
+  const displayItems = items.slice(0, 6);
+
   return (
     <div className={styles.container}>
-      <p>Data galeri belum tersedia.</p>
+      {displayItems.map((item) => (
+        <div key={item.id} className={styles.imageWrapper}>
+          <img src={item.image.src} alt={item.image.alt} className={styles.image} />
+        </div>
+      ))}
     </div>
   );
 }

@@ -17,8 +17,8 @@ export type HomeTeam = {
 export type HomePlayer = {
   id: string;
   name: string;
-  teamId: string;
-  teamName: string;
+  teamId?: string;
+  teamName?: string;
   position?: string;
   photo: HomeImageAsset;
   statistics?: {
@@ -34,7 +34,8 @@ export type HomePlayer = {
 export type HomeMatch = {
   id: string;
   phase: string;
-  status: "Selesai" | "Resmi";
+  status: string;
+  verificationStatus?: string;
   date?: string;
   venue?: string;
   homeTeam: HomeTeam;
@@ -42,6 +43,13 @@ export type HomeMatch = {
   homeScore: number;
   awayScore: number;
   note?: string;
+};
+
+export type HomeBracketData = {
+  semifinals: HomeMatch[];
+  thirdPlace?: HomeMatch;
+  final: HomeMatch;
+  champion: HomeTeam;
 };
 
 export type HomeStanding = {

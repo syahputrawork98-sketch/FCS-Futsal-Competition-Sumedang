@@ -4,7 +4,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./sponsors-section.module.css";
-import type { HomeSectionState, HomeSponsor } from "../../types/home.types";
+import type { HomeSectionState, HomeSponsor } from "../types/home.types";
 
 type SponsorsSectionProps = {
   sponsors: HomeSectionState<HomeSponsor[]>;
@@ -36,7 +36,14 @@ export function SponsorsSection({ sponsors }: SponsorsSectionProps) {
 
           {sponsors.status === "ready" && sponsors.data.length > 0 && (
             <div className={styles.grid}>
-              <p>Daftar Sponsor (Placeholder)</p>
+              {sponsors.data.map(sponsor => (
+                <div key={sponsor.id} className={styles.sponsorWrapper}>
+                  {sponsor.logo.src && (
+                    <img src={sponsor.logo.src} alt={sponsor.logo.alt} className={styles.logo} />
+                  )}
+                  <span className={styles.sponsorName}>{sponsor.name}</span>
+                </div>
+              ))}
             </div>
           )}
         </div>

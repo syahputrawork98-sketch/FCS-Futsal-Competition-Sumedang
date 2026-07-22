@@ -1,9 +1,9 @@
 .tableContainer {
   width: 100%;
   overflow-x: auto;
-  background-color: var(--color-background-primary);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-large);
 }
 
 .table {
@@ -16,8 +16,8 @@
   padding: var(--space-4);
   font-weight: 700;
   font-size: 1.125rem;
-  background-color: var(--color-background-secondary);
-  border-bottom: 1px solid var(--color-border-primary);
+  background-color: var(--color-secondary-surface);
+  border-bottom: 1px solid var(--color-border-light);
   text-align: left;
 }
 
@@ -27,13 +27,13 @@ th {
   font-weight: 600;
   color: var(--color-text-secondary);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--color-border-primary);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 td {
   padding: var(--space-3) var(--space-4);
   font-size: 0.875rem;
-  border-bottom: 1px solid var(--color-border-secondary);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .row:last-child td {
@@ -71,7 +71,7 @@ td {
   width: 60px;
   text-align: center;
   font-weight: 700;
-  color: var(--color-brand-primary);
+  color: var(--color-midnight-navy);
 }
 
 .statusCol {
@@ -82,19 +82,19 @@ td {
 .status {
   display: inline-block;
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-small);
   font-size: 0.75rem;
   font-weight: 600;
 }
 
 .success {
-  background-color: rgba(var(--color-semantic-success-rgb), 0.1);
-  color: var(--color-semantic-success);
+  background-color: rgba(var(--color-status-success-rgb), 0.1);
+  color: var(--color-status-success);
 }
 
 .danger {
-  background-color: rgba(var(--color-semantic-danger-rgb), 0.1);
-  color: var(--color-semantic-danger);
+  background-color: rgba(var(--color-status-danger-rgb), 0.1);
+  color: var(--color-status-danger);
 }
 
 @media (max-width: 767px) {

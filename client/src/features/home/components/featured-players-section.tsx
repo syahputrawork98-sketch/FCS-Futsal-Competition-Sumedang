@@ -5,7 +5,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./featured-players-section.module.css";
-import type { HomeSectionState, HomePlayer } from "../../types/home.types";
+import type { HomeSectionState, HomePlayer } from "../types/home.types";
 
 type FeaturedPlayersSectionProps = {
   players: HomeSectionState<HomePlayer[]>;

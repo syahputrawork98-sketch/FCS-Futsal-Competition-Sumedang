@@ -1,9 +1,9 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-primary);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-md);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-medium);
   padding: var(--space-4);
 }
 
@@ -23,7 +23,7 @@
 }
 
 .date {
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
 }
 
 .teams {
@@ -68,11 +68,28 @@
   justify-content: space-between;
   align-items: center;
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border-secondary);
+  border-top: 1px solid var(--color-border-light);
+}
+
+.statusGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
 }
 
 .status {
   font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-semantic-success);
+  font-weight: 700;
+  color: var(--color-status-success);
+  text-transform: uppercase;
+}
+
+.verificationStatus {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  background-color: color-mix(in srgb, var(--color-status-success) 10%, transparent);
+  color: var(--color-status-success);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-small);
 }

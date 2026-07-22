@@ -5,7 +5,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./featured-teams-section.module.css";
-import type { HomeSectionState, HomeTeam } from "../../types/home.types";
+import type { HomeSectionState, HomeTeam } from "../types/home.types";
 
 type FeaturedTeamsSectionProps = {
   teams: HomeSectionState<HomeTeam[]>;

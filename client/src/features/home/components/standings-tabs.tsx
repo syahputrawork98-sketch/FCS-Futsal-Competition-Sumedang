@@ -1,39 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { StandingsTable } from "./standings-table";
 import styles from "./standings-tabs.module.css";
-import type { HomeStanding } from "../../types/home.types";
+import type { HomeStanding } from "../types/home.types";
 
 type StandingsTabsProps = {
-  groupA: HomeStanding[];
-  groupB: HomeStanding[];
+  standings: Record<string, HomeStanding[]>;
 };
 
-export function StandingsTabs({ groupA, groupB }: StandingsTabsProps) {
-  const [activeTab, setActiveTab] = useState<"A" | "B">("A");
+export function StandingsTabs({ standings }: StandingsTabsProps) {
+  const groups = Object.keys(standings);
+  const [activeGroup, setActiveGroup] = useState(groups[0]);
+  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
+
+  if (groups.length === 0) return null;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let nextIndex = index;
+
+    if (e.key === "ArrowRight") {
+      nextIndex = (index + 1) % groups.length;
+    } else if (e.key === "ArrowLeft") {
+      nextIndex = (index - 1 + groups.length) % groups.length;
+    } else if (e.key === "Home") {
+      nextIndex = 0;
+    } else if (e.key === "End") {
+      nextIndex = groups.length - 1;
+    }
+
+    if (nextIndex !== index) {
+      e.preventDefault();
+      setActiveGroup(groups[nextIndex]);
+      tabsRef.current[nextIndex]?.focus();
+    }
+  };
 
   return (
     <div className={styles.container}>
-      <div className={styles.tabs} role="tablist" aria-label="Grup Klasemen">
-        <button
-          role="tab"
-          aria-selected={activeTab === "A"}
-          aria-controls="panel-a"
-          id="tab-a"
-          className={`${styles.tab} ${activeTab === "A" ? styles.active : ""}`}
-          onClick={() => setActiveTab("A")}
-        >
-          Grup A
-        </button>
-        <button
-          role="tab"
-          aria-selected={activeTab === "B"}
-          aria-controls="panel-b"
-          id="tab-b"
-          className={`${styles.tab} ${activeTab === "B" ? styles.active : ""}`}
-          onClick={() => setActiveTab("B")}
-        >
           Grup B
         </button>
       </div>

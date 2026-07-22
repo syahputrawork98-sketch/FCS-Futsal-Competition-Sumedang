@@ -4,14 +4,14 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-8);
-  background-color: var(--color-background-primary);
-  border: 1px dashed var(--color-border-primary);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  border: 1px dashed var(--color-border-light);
+  border-radius: var(--radius-large);
   text-align: center;
 }
 
 .icon {
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
   margin-bottom: var(--space-4);
 }
 
@@ -24,5 +24,5 @@
 
 .description {
   font-size: 0.875rem;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
 }

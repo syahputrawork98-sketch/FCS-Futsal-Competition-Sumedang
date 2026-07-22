@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./news-feature-card.module.css";
-import type { HomeNews } from "../../types/home.types";
+import type { HomeNews } from "../types/home.types";
 
 type NewsFeatureCardProps = {
   news: HomeNews;

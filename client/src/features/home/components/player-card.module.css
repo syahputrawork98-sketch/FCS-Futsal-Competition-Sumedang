@@ -1,9 +1,9 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-primary);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-large);
   overflow: hidden;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -12,19 +12,19 @@
 
 .card:hover, .card:focus-visible {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-2);
+  border-color: var(--color-electric-blue);
   outline: none;
 }
 
 .card:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-background-primary), 0 0 0 4px var(--color-focus-ring);
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-electric-blue);
 }
 
 .imageContainer {
   width: 100%;
   aspect-ratio: 1 / 1;
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-secondary-surface);
   overflow: hidden;
 }
 
@@ -59,19 +59,19 @@
   font-size: 0.75rem;
   font-weight: 600;
   padding: var(--space-1) var(--space-2);
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-secondary-surface);
   color: var(--color-text-secondary);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-small);
   margin-bottom: var(--space-3);
 }
 
 .awardBadge {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--color-accent-primary);
+  color: var(--color-muted-gold);
   background-color: rgba(212, 175, 55, 0.1);
   padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-small);
   margin-bottom: var(--space-3);
   display: inline-block;
   align-self: flex-start;
@@ -82,7 +82,7 @@
   gap: var(--space-4);
   margin-top: auto;
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border-secondary);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .stat {
@@ -93,12 +93,12 @@
 .statValue {
   font-size: 1.25rem;
   font-weight: 800;
-  color: var(--color-brand-primary);
+  color: var(--color-midnight-navy);
   line-height: 1;
 }
 
 .statLabel {
   font-size: 0.75rem;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
   text-transform: uppercase;
 }

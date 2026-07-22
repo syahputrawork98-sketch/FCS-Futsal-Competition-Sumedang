@@ -1,6 +1,6 @@
 .section {
   padding: var(--space-12) 0;
-  background-color: var(--color-background-primary);
+  background-color: var(--color-white);
 }
 
 .content {

@@ -2,7 +2,7 @@ import { Trophy } from "lucide-react";
 import { PlayerAvatarFallback } from "./player-avatar-fallback";
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./award-feature-card.module.css";
-import type { HomeAward } from "../../types/home.types";
+import type { HomeAward } from "../types/home.types";
 
 type AwardFeatureCardProps = {
   award: HomeAward;

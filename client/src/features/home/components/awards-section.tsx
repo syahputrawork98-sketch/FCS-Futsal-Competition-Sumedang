@@ -6,7 +6,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./awards-section.module.css";
-import type { HomeSectionState, HomeAward } from "../../types/home.types";
+import type { HomeSectionState, HomeAward } from "../types/home.types";
 
 type AwardsSectionProps = {
   awards: HomeSectionState<HomeAward[]>;

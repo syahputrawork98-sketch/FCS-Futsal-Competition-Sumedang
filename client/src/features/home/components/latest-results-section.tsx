@@ -5,7 +5,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./latest-results-section.module.css";
-import type { HomeSectionState, HomeMatch } from "../../types/home.types";
+import type { HomeSectionState, HomeMatch } from "../types/home.types";
 
 type LatestResultsSectionProps = {
   results: HomeSectionState<HomeMatch[]>;

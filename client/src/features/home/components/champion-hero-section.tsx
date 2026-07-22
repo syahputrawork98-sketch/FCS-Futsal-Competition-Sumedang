@@ -1,8 +1,9 @@
 import { Trophy } from "lucide-react";
+import { PageContainer } from "@/components/layout/page-container/page-container";
 import { ActionLink } from "@/components/ui/action-link/action-link";
 import { StatusBadge } from "@/components/ui/status-badge/status-badge";
 import styles from "./champion-hero-section.module.css";
-import type { HomeTeam } from "../../types/home.types";
+import type { HomeTeam } from "../types/home.types";
 
 type ChampionHeroSectionProps = {
   competitionName: string;
@@ -19,7 +20,7 @@ export function ChampionHeroSection({
 }: ChampionHeroSectionProps) {
   return (
     <section className={styles.section} aria-labelledby="hero-heading">
-      <div className={styles.container}>
+      <PageContainer>
         <div className={styles.content}>
           <StatusBadge variant="success">Selesai</StatusBadge>
           <h1 id="hero-heading" className={styles.title}>
@@ -34,7 +35,7 @@ export function ChampionHeroSection({
 
           <div className={styles.meta}>
             <span>{date}</span>
-            <span className={styles.metaDivider}>•</span>
+            <span className={styles.metaDivider} aria-hidden="true">•</span>
             <span>{location}</span>
           </div>
 
@@ -51,7 +52,7 @@ export function ChampionHeroSection({
             </ActionLink>
           </div>
         </div>
-      </div>
+      </PageContainer>
     </section>
   );
 }

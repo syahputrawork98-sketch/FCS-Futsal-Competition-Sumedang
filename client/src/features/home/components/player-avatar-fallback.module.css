@@ -2,11 +2,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-background-secondary);
-  color: var(--color-text-tertiary);
+  background-color: var(--color-secondary-surface);
+  color: var(--color-text-muted);
   overflow: hidden;
   position: relative;
-  border-radius: var(--radius-md); /* Following typical player photo bounds */
+  border-radius: var(--radius-medium); /* Following typical player photo bounds */
 }
 
 .icon {

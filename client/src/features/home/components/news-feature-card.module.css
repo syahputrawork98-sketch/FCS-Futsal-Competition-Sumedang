@@ -1,9 +1,9 @@
 .card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-background-primary);
-  border: 1px solid var(--color-border-primary);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-large);
   overflow: hidden;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -12,19 +12,19 @@
 
 .card:hover, .card:focus-visible {
   transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-2);
+  border-color: var(--color-electric-blue);
   outline: none;
 }
 
 .card:focus-visible {
-  box-shadow: 0 0 0 2px var(--color-background-primary), 0 0 0 4px var(--color-focus-ring);
+  box-shadow: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-electric-blue);
 }
 
 .imageContainer {
   aspect-ratio: 16 / 9;
   width: 100%;
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-secondary-surface);
 }
 
 .image {
@@ -55,12 +55,12 @@
 
 .category {
   font-weight: 700;
-  color: var(--color-brand-primary);
+  color: var(--color-midnight-navy);
   text-transform: uppercase;
 }
 
 .date {
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
 }
 
 .title {

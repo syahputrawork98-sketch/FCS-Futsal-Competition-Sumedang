@@ -6,7 +6,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./standings-preview-section.module.css";
-import type { HomeSectionState, HomeStanding } from "../../types/home.types";
+import type { HomeSectionState, HomeStanding } from "../types/home.types";
 
 type StandingsPreviewSectionProps = {
   standings: HomeSectionState<{ groupA: HomeStanding[]; groupB: HomeStanding[] }>;

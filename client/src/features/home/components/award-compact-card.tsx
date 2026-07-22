@@ -1,7 +1,7 @@
 import { PlayerAvatarFallback } from "./player-avatar-fallback";
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./award-compact-card.module.css";
-import type { HomeAward } from "../../types/home.types";
+import type { HomeAward } from "../types/home.types";
 
 type AwardCompactCardProps = {
   award: HomeAward;

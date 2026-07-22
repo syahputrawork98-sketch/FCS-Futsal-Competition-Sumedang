@@ -4,25 +4,25 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-8);
-  background-color: var(--color-background-primary);
-  border: 1px solid var(--color-semantic-danger);
-  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-status-danger);
+  border-radius: var(--radius-large);
   text-align: center;
 }
 
 .icon {
-  color: var(--color-semantic-danger);
+  color: var(--color-status-danger);
   margin-bottom: var(--space-4);
 }
 
 .title {
   font-size: 1.125rem;
   font-weight: 600;
-  color: var(--color-semantic-danger);
+  color: var(--color-status-danger);
   margin-bottom: var(--space-2);
 }
 
 .description {
   font-size: 0.875rem;
-  color: var(--color-text-tertiary);
+  color: var(--color-text-muted);
 }

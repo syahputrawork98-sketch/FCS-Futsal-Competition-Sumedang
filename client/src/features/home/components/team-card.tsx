@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./team-card.module.css";
-import type { HomeTeam } from "../../types/home.types";
+import type { HomeTeam } from "../types/home.types";
 
 type TeamCardProps = {
   team: HomeTeam;

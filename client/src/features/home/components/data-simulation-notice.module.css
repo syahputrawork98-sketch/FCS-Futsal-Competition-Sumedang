@@ -1,7 +1,7 @@
 .section {
   padding: var(--space-6) 0;
-  background-color: var(--color-background-primary);
-  border-top: 1px solid var(--color-border-primary);
+  background-color: var(--color-white);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .container {
@@ -9,13 +9,13 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-4);
-  background-color: var(--color-background-secondary);
-  border-radius: var(--radius-md);
+  background-color: var(--color-secondary-surface);
+  border-radius: var(--radius-medium);
   color: var(--color-text-secondary);
 }
 
 .icon {
-  color: var(--color-accent-primary); /* Uses a subtle accent for visibility */
+  color: var(--color-electric-blue); /* Uses a subtle accent for visibility */
   flex-shrink: 0;
 }
 

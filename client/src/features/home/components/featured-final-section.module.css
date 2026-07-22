@@ -1,6 +1,6 @@
 .section {
   padding: var(--space-8) 0;
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-secondary-surface);
 }
 
 .grid {

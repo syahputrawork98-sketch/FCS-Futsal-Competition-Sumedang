@@ -5,7 +5,7 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./gallery-preview-section.module.css";
-import type { HomeSectionState, HomeGalleryItem } from "../../types/home.types";
+import type { HomeSectionState, HomeGalleryItem } from "../types/home.types";
 
 type GalleryPreviewSectionProps = {
   gallery: HomeSectionState<HomeGalleryItem[]>;
@@ -36,7 +36,7 @@ export function GalleryPreviewSection({ gallery }: GalleryPreviewSectionProps) {
           )}
 
           {hasData && (
-            <GalleryMosaic />
+            <GalleryMosaic items={gallery.data} />
           )}
         </div>
       </PageContainer>

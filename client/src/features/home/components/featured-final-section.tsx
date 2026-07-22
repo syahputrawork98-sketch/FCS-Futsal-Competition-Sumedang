@@ -4,7 +4,7 @@ import { CompetitionMetricCard } from "./competition-metric-card";
 import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./featured-final-section.module.css";
-import type { HomeSectionState, HomeMatch } from "../../types/home.types";
+import type { HomeSectionState, HomeMatch } from "../types/home.types";
 
 type FeaturedFinalSectionProps = {
   featuredFinal: HomeSectionState<HomeMatch>;

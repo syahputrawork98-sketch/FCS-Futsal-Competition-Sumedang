@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-background-secondary);
+  background-color: var(--color-secondary-surface);
   color: var(--color-text-secondary);
   border-radius: 50%; /* Make it round like a logo */
   position: relative;

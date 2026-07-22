@@ -1,6 +1,6 @@
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./standings-table.module.css";
-import type { HomeStanding } from "../../types/home.types";
+import type { HomeStanding } from "../types/home.types";
 
 type StandingsTableProps = {
   caption: string;

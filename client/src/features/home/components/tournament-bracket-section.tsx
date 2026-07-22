@@ -6,11 +6,10 @@ import { HomeSectionSkeleton } from "./home-section-skeleton";
 import { HomeEmptyState } from "./home-empty-state";
 import { HomeErrorState } from "./home-error-state";
 import styles from "./tournament-bracket-section.module.css";
-import type { HomeSectionState } from "../../types/home.types";
+import type { HomeSectionState, HomeBracketData } from "../types/home.types";
 
-// In a real application, the generic type would be the bracket data structure
 type TournamentBracketSectionProps = {
-  bracket: HomeSectionState<any>;
+  bracket: HomeSectionState<HomeBracketData>;
 };
 
 export function TournamentBracketSection({ bracket }: TournamentBracketSectionProps) {
@@ -31,16 +30,17 @@ export function TournamentBracketSection({ bracket }: TournamentBracketSectionPr
           )}
 
           {bracket.status === "empty" && (
-            <HomeEmptyState title="Bracket Belum Tersedia" description={bracket.message} />
+            <HomeEmptyState title="Bagan Turnamen Belum Tersedia" description={bracket.message} />
           )}
 
           {bracket.status === "ready" && (
             <>
               <div className={styles.desktopView}>
-                <DesktopBracket />
+                <DesktopBracket data={bracket.data} />
               </div>
+              
               <div className={styles.mobileView}>
-                <MobileBracketTimeline />
+                <MobileBracketTimeline data={bracket.data} />
               </div>
             </>
           )}

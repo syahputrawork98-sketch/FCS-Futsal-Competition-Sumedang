@@ -1,7 +1,7 @@
 import { ActionLink } from "@/components/ui/action-link/action-link";
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./match-result-card.module.css";
-import type { HomeMatch } from "../../types/home.types";
+import type { HomeMatch } from "../types/home.types";
 
 type MatchResultCardProps = {
   match: HomeMatch;
@@ -45,7 +45,12 @@ export function MatchResultCard({ match }: MatchResultCardProps) {
         <ActionLink href={`/pertandingan/${match.id}`} variant="secondary" size="small">
           Detail
         </ActionLink>
-        <span className={styles.status}>{match.status}</span>
+        <div className={styles.statusGroup}>
+          <span className={styles.status}>{match.status}</span>
+          {match.verificationStatus && (
+            <span className={styles.verificationStatus}>{match.verificationStatus}</span>
+          )}
+        </div>
       </div>
     </div>
   );

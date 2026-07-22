@@ -1,7 +1,7 @@
 import { ActionLink } from "@/components/ui/action-link/action-link";
 import { TeamLogoFallback } from "./team-logo-fallback";
 import styles from "./featured-match-card.module.css";
-import type { HomeMatch } from "../../types/home.types";
+import type { HomeMatch } from "../types/home.types";
 
 type FeaturedMatchCardProps = {
   match: HomeMatch;
@@ -12,7 +12,12 @@ export function FeaturedMatchCard({ match }: FeaturedMatchCardProps) {
     <div className={styles.card}>
       <div className={styles.header}>
         <span className={styles.phase}>{match.phase}</span>
-        <span className={styles.status}>{match.status}</span>
+        <div className={styles.statusGroup}>
+          <span className={styles.status}>{match.status}</span>
+          {match.verificationStatus && (
+            <span className={styles.verificationStatus}>{match.verificationStatus}</span>
+          )}
+        </div>
       </div>
 
       <div className={styles.teams}>

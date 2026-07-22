@@ -1,10 +1,135 @@
 .container {
+  padding: var(--space-4) 0;
+}
+
+.timeline {
+  position: relative;
+  padding-left: var(--space-8);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 11px;
+  width: 2px;
+  background-color: var(--color-border-light);
+}
+
+.timelineItem {
+  position: relative;
+}
+
+.timelineDot {
+  position: absolute;
+  left: calc(var(--space-8) * -1);
+  top: var(--space-4);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--color-white);
+  border: 2px solid var(--color-electric-blue);
+  transform: translateX(-5px);
+}
+
+.championDot {
+  border-color: var(--color-muted-gold);
+  background-color: var(--color-muted-gold);
+}
+
+.matchNode {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-1);
+}
+
+.matchTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--color-border-light);
+  background-color: var(--color-secondary-surface);
+  border-top-left-radius: var(--radius-medium);
+  border-top-right-radius: var(--radius-medium);
+}
+
+.matchCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.teamRow {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: var(--space-8);
-  background-color: var(--color-background-primary);
-  border: 1px dashed var(--color-border-primary);
-  border-radius: var(--radius-lg);
-  color: var(--color-text-secondary);
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.teamRow:last-child {
+  border-bottom: none;
+}
+
+.winner {
+  font-weight: 700;
+}
+
+.teamInfo, .championInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.teamName {
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+}
+
+.winner .teamName {
+  color: var(--color-midnight-navy);
+}
+
+.score {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.championNode {
+  background-color: var(--color-midnight-navy);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-2);
+  overflow: hidden;
+}
+
+.championTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-muted-gold);
+  padding: var(--space-2) var(--space-3);
+  background-color: rgba(0,0,0,0.2);
+}
+
+.championCard {
+  padding: var(--space-3);
+}
+
+.championName {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--color-text-inverse);
 }
