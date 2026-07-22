@@ -101,13 +101,21 @@ export function MobileNavigation() {
                           {item.label}
                         </span>
                         <ul className={styles.subList}>
-                          {item.children!.map((child) => (
-                            <li key={child.label}>
-                              <Link href={child.href} className={styles.link} onClick={handleCloseClick}>
-                                {child.label}
-                              </Link>
-                            </li>
-                          ))}
+                          {item.children!.map((child) => {
+                            const isChildActive = isActive(child.href);
+                            return (
+                              <li key={child.label}>
+                                <Link 
+                                  href={child.href} 
+                                  className={`${styles.link} ${isChildActive ? styles.active : ""}`} 
+                                  onClick={handleCloseClick}
+                                  aria-current={isChildActive ? "page" : undefined}
+                                >
+                                  {child.label}
+                                </Link>
+                              </li>
+                            );
+                          })}
                         </ul>
                       </div>
                     ) : (

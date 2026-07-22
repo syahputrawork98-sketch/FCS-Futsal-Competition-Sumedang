@@ -64,13 +64,12 @@ export function DesktopNavigation() {
                   onClick={() => setOpenDropdown(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   aria-controls={`dropdown-${index}`}
-                  aria-haspopup="true"
                 >
                   {item.label}
                   <ChevronDown size={16} aria-hidden="true" />
                 </button>
                 {isOpen && (
-                  <div id={`dropdown-${index}`} className={styles.dropdownMenu} role="menu" aria-labelledby={`dropdown-toggle-${index}`}>
+                  <div id={`dropdown-${index}`} className={styles.dropdownMenu} aria-labelledby={`dropdown-toggle-${index}`}>
                     {item.children!.map((child) => {
                       const isChildActive = isActive(child.href);
                       return (
@@ -79,7 +78,6 @@ export function DesktopNavigation() {
                           href={child.href}
                           className={`${styles.dropdownLink} ${isChildActive ? styles.activeChild : ""}`}
                           aria-current={isChildActive ? "page" : undefined}
-                          role="menuitem"
                           onClick={() => setOpenDropdown(null)}
                         >
                           {child.label}
