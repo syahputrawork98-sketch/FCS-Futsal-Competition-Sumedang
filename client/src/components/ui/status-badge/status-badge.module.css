@@ -1,0 +1,46 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.neutral {
+  background-color: var(--color-border-light);
+  color: var(--color-text-secondary);
+}
+
+.info {
+  background-color: #dbeafe;
+  color: var(--color-status-info);
+}
+
+.success {
+  background-color: #dcfce7;
+  color: var(--color-status-success);
+}
+
+.warning {
+  background-color: #fef3c7;
+  color: var(--color-status-warning);
+}
+
+.danger {
+  background-color: #fee2e2;
+  color: var(--color-status-danger);
+}
+
+.live {
+  background-color: var(--color-status-live);
+  color: var(--color-white);
+}
+
+.champion {
+  background-color: var(--color-muted-gold);
+  color: var(--color-white);
+}

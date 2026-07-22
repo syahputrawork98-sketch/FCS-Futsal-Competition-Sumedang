@@ -1,18 +1,20 @@
-import Link from "next/link";
-import { PageContainer } from "@/components/layout/page-container";
+import { PageContainer } from "@/components/layout/page-container/page-container";
+import { SectionHeading } from "@/components/ui/section-heading/section-heading";
+import { StatusBadge } from "@/components/ui/status-badge/status-badge";
 import styles from "./not-found.module.css";
 
 export default function NotFound() {
   return (
     <PageContainer>
       <div className={styles.container}>
-        <h1 className={styles.title}>Halaman tidak ditemukan</h1>
-        <p className={styles.description}>
-          Maaf, halaman yang Anda cari tidak tersedia saat ini.
-        </p>
-        <Link href="/" className={styles.link}>
-          Kembali ke beranda
-        </Link>
+        <StatusBadge variant="danger">404</StatusBadge>
+        <SectionHeading
+          title="Halaman Tidak Ditemukan"
+          description="Maaf, halaman yang Anda cari tidak tersedia atau sedang dalam pengembangan."
+          actionLabel="Kembali ke Beranda"
+          actionHref="/"
+          alignment="center"
+        />
       </div>
     </PageContainer>
   );

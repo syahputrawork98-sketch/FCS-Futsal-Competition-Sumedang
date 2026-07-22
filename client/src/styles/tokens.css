@@ -1,0 +1,78 @@
+:root {
+  /* Warna Utama */
+  --color-midnight-navy: #0b1220;
+  --color-electric-blue: #2563eb;
+  --color-deep-charcoal: #111827;
+  --color-steel-blue: #334155;
+  --color-cyan-accent: #22d3ee;
+  --color-muted-gold: #c6a15b;
+
+  /* Warna Permukaan */
+  --color-white: #ffffff;
+  --color-soft-background: #f7f9fc;
+  --color-secondary-surface: #f1f5f9;
+  --color-dark-surface: #162033;
+
+  /* Warna Teks */
+  --color-text-primary: #111827;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+  --color-text-inverse-secondary: #cbd5e1;
+  --color-text-inverse-muted: #94a3b8;
+
+  /* Warna Status */
+  --color-status-live: #ef4444;
+  --color-status-success: #16a34a;
+  --color-status-warning: #d97706;
+  --color-status-danger: #dc2626;
+  --color-status-info: #2563eb;
+  --color-status-neutral: #64748b;
+
+  /* Border */
+  --color-border-light: #e2e8f0;
+  --color-border-dark: rgba(255, 255, 255, 0.12);
+
+  /* Spacing */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+
+  /* Radius */
+  --radius-small: 6px;
+  --radius-medium: 10px;
+  --radius-large: 14px;
+  --radius-pill: 999px;
+
+  /* Shadow */
+  --shadow-none: none;
+  --shadow-1: 0 2px 8px rgba(15, 23, 42, 0.08);
+  --shadow-2: 0 8px 24px rgba(15, 23, 42, 0.12);
+
+  /* Motion */
+  --motion-fast: 150ms;
+  --motion-normal: 225ms;
+  --motion-slow: 300ms;
+  --motion-ease: ease;
+
+  /* Container */
+  --container-max-width: 1280px;
+  --container-padding-mobile: 16px;
+  --container-padding-tablet: 24px;
+  --container-padding-desktop: 32px;
+
+  /* Header dan Layer */
+  --header-height: 76px;
+  --z-header: 40;
+  --z-dropdown: 50;
+  --z-drawer: 60;
+}

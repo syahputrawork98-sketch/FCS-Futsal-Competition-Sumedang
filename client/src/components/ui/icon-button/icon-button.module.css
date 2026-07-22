@@ -1,0 +1,22 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-2);
+  border-radius: var(--radius-small);
+  color: inherit;
+  transition: background-color var(--motion-fast) var(--motion-ease);
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.button:hover, .button:focus {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.inverse:hover, .inverse:focus {
+  background-color: rgba(255, 255, 255, 0.1);
+}

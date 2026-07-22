@@ -1,0 +1,15 @@
+.brand {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.inverse {
+  color: var(--color-white);
+}
+
+.default {
+  color: var(--color-text-primary);
+}
