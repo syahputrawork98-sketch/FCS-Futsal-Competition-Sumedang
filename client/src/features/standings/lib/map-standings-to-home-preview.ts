@@ -42,8 +42,10 @@ export function getHomeStandingsPreviewData(): HomeSectionState<{
             : row.qualificationStatus === "eliminated"
             ? "Gugur"
             : row.rankingResolution === "unresolved_tie"
-            ? "Menunggu Keputusan"
-            : "Pending",
+            ? "Menunggu keputusan"
+            : pageData.status === "provisional"
+            ? "Menunggu hasil"
+            : "Belum ditentukan",
       }));
 
     return {

@@ -10,98 +10,137 @@ import type {
 } from "../types/standings.types";
 
 export function resolveStandingsPageData(): StandingsPageData {
-  const warnings: StandingsDataWarning[] = validateStandingsPrototypeData();
-
   const config = DEFAULT_STANDINGS_CONFIG;
   const competition = matchesPrototypeData.competition;
+  const warnings: StandingsDataWarning[] = [];
+
+  // Run initial data validations (Requirement 5 & 1)
+  try {
+    const validationWarnings = validateStandingsPrototypeData();
+    warnings.push(...validationWarnings);
+  } catch (err) {
+    warnings.push({
+      code: "VALIDATION_ERROR",
+      message: err instanceof Error ? err.message : "Kesalahan integritas data.",
+    });
+  }
 
   const groups = matchesPrototypeData.groups
     .filter((g) => g.phaseId === config.groupPhaseId)
     .sort((a, b) => a.order - b.order);
 
   const derivedGroups: GroupStandings[] = [];
-
   let totalGroupMatches = 0;
   let completedOfficialGroupMatches = 0;
 
+  // Requirement 1: Process each group in its own try/catch block for error isolation
   for (const group of groups) {
-    const groupTeams = matchesPrototypeData.teams
-      .filter((t) => t.groupId === group.id)
-      .sort((a, b) => a.name.localeCompare(b.name));
+    try {
+      // Requirement 5: Do NOT sort teams alphabetically. Retain original team dataset order.
+      const groupTeams = matchesPrototypeData.teams.filter((t) => t.groupId === group.id);
 
-    const groupResult = deriveGroupStandings(
-      group,
-      groupTeams,
-      matchesPrototypeData.matches,
-      config
-    );
+      const groupResult = deriveGroupStandings(
+        group,
+        groupTeams,
+        matchesPrototypeData.matches,
+        config
+      );
 
-    // Validate derived row formulas (Requirement 5)
-    let totalGF = 0;
-    let totalGA = 0;
+      // Validate derived row formulas
+      let totalGF = 0;
+      let totalGA = 0;
 
-    for (const row of groupResult.rows) {
-      totalGF += row.goalsFor;
-      totalGA += row.goalsAgainst;
+      for (const row of groupResult.rows) {
+        totalGF += row.goalsFor;
+        totalGA += row.goalsAgainst;
 
-      if (row.played !== row.won + row.drawn + row.lost) {
+        if (row.played !== row.won + row.drawn + row.lost) {
+          warnings.push({
+            code: "FORMULA_PLAYED_MISMATCH",
+            message: `Tim '${row.team.name}' played (${row.played}) != won+drawn+lost (${row.won + row.drawn + row.lost}).`,
+            groupId: group.id,
+          });
+        }
+
+        if (row.goalDifference !== row.goalsFor - row.goalsAgainst) {
+          warnings.push({
+            code: "FORMULA_GD_MISMATCH",
+            message: `Tim '${row.team.name}' goalDifference (${row.goalDifference}) != GF-GA (${row.goalsFor - row.goalsAgainst}).`,
+            groupId: group.id,
+          });
+        }
+
+        if (
+          row.points !==
+          row.won * config.points.win + row.drawn * config.points.draw + row.lost * config.points.loss
+        ) {
+          warnings.push({
+            code: "FORMULA_PTS_MISMATCH",
+            message: `Tim '${row.team.name}' points (${row.points}) calculation error.`,
+            groupId: group.id,
+          });
+        }
+      }
+
+      if (totalGF !== totalGA) {
         warnings.push({
-          code: "FORMULA_PLAYED_MISMATCH",
-          message: `Tim '${row.team.name}' played (${row.played}) != won+drawn+lost (${row.won + row.drawn + row.lost}).`,
+          code: "GROUP_GOALS_MISMATCH",
+          message: `Total Gol Memasukkan (${totalGF}) != Total Gol Kebobolan (${totalGA}) di ${group.name}.`,
           groupId: group.id,
         });
       }
 
-      if (row.goalDifference !== row.goalsFor - row.goalsAgainst) {
+      if (groupResult.hasUnresolvedTie) {
         warnings.push({
-          code: "FORMULA_GD_MISMATCH",
-          message: `Tim '${row.team.name}' goalDifference (${row.goalDifference}) != GF-GA (${row.goalsFor - row.goalsAgainst}).`,
+          code: "UNRESOLVED_TIE",
+          message: `Posisi beberapa tim di ${group.name} belum dapat diputuskan dengan aturan tie-break aktif.`,
           groupId: group.id,
         });
       }
 
-      if (row.points !== row.won * config.points.win + row.drawn * config.points.draw + row.lost * config.points.loss) {
-        warnings.push({
-          code: "FORMULA_PTS_MISMATCH",
-          message: `Tim '${row.team.name}' points (${row.points}) calculation error.`,
-          groupId: group.id,
-        });
-      }
-    }
-
-    if (totalGF !== totalGA) {
+      derivedGroups.push(groupResult);
+      totalGroupMatches += groupResult.totalMatches;
+      completedOfficialGroupMatches += groupResult.completedOfficialMatches;
+    } catch (err) {
+      // Group isolation: catch group processing failure without failing the entire page
       warnings.push({
-        code: "GROUP_GOALS_MISMATCH",
-        message: `Total Gol Memasukkan (${totalGF}) != Total Gol Kebobolan (${totalGA}) di ${group.name}.`,
-        groupId: group.id,
-      });
-    }
-
-    derivedGroups.push(groupResult);
-    totalGroupMatches += groupResult.totalMatches;
-    completedOfficialGroupMatches += groupResult.completedOfficialMatches;
-
-    if (groupResult.hasUnresolvedTie) {
-      warnings.push({
-        code: "UNRESOLVED_TIE",
-        message: `Posisi beberapa tim di ${group.name} belum dapat diputuskan dengan aturan tie-break aktif.`,
+        code: "GROUP_PROCESSING_ERROR",
+        message: `Gagal memproses data klasemen ${group.name}: ${err instanceof Error ? err.message : String(err)}`,
         groupId: group.id,
       });
     }
   }
 
-  // Determine overall page status (Requirement 2 & 4)
+  // Requirement 2: Real unavailable status when zero groups could be derived
+  if (derivedGroups.length === 0) {
+    return {
+      competition,
+      status: "unavailable",
+      groups: [],
+      totalGroupMatches: 0,
+      completedOfficialGroupMatches: 0,
+      qualifiedTeamCount: null,
+      config,
+      warnings,
+    };
+  }
+
+  // Requirement 1 & 4: Determine page status
+  const hasPartialWarning = warnings.some(
+    (w) => w.code.includes("MISMATCH") || w.code.includes("NULL_SCORE") || w.code === "GROUP_PROCESSING_ERROR"
+  );
+  const groupProcessingFailed = derivedGroups.length < groups.length;
+
   const allFinal = derivedGroups.every((g) => g.status === "final");
   const allNotStarted = derivedGroups.every((g) => g.status === "not_started");
-  const hasPartialWarning = warnings.some((w) => w.code.includes("MISMATCH") || w.code.includes("NULL_SCORE"));
 
   let pageStatus: StandingsStatus = "final";
-  if (hasPartialWarning) {
+
+  if (groupProcessingFailed || hasPartialWarning) {
     pageStatus = "partial";
   } else if (allNotStarted) {
     pageStatus = "not_started";
   } else if (allFinal) {
-    // If any team qualificationStatus is pending due to boundary unresolved tie, page status is provisional
     const hasPendingQualification = derivedGroups.some((g) =>
       g.rows.some((r) => r.qualificationStatus === "pending")
     );
@@ -110,7 +149,7 @@ export function resolveStandingsPageData(): StandingsPageData {
     pageStatus = "provisional";
   }
 
-  // Count actual qualified rows across all groups (Requirement 2)
+  // Count actual qualified rows
   let actualQualifiedCount = 0;
   let hasPending = false;
 

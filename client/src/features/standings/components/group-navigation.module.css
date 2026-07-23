@@ -2,7 +2,7 @@
   margin-bottom: var(--space-6, 1.5rem);
 }
 
-.tabList {
+.desktopFilterWrapper {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -13,7 +13,7 @@
   width: fit-content;
 }
 
-.desktopFilterAll {
+.desktopBtn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -28,44 +28,67 @@
   transition: all 0.15s ease;
 }
 
-.desktopFilterAll:hover {
+.desktopBtn:hover {
   color: var(--color-text-main, #ffffff);
   background: rgba(255, 255, 255, 0.05);
 }
 
-.tabItem {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--color-text-muted, #94a3b8);
-  text-decoration: none;
-  transition: all 0.15s ease;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
-
-.tabItem:hover {
-  color: var(--color-text-main, #ffffff);
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.active {
+.desktopActive {
   background: var(--color-accent-blue, #38bdf8);
   color: #0f172a;
 }
 
-.active:hover {
+.desktopActive:hover {
+  background: var(--color-accent-blue, #38bdf8);
+  color: #0f172a;
+}
+
+.mobileTabList {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md, 8px);
+  width: fit-content;
+}
+
+.mobileTab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #94a3b8);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.mobileTab:hover {
+  color: var(--color-text-main, #ffffff);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mobileActive {
+  background: var(--color-accent-blue, #38bdf8);
+  color: #0f172a;
+}
+
+.mobileActive:hover {
   background: var(--color-accent-blue, #38bdf8);
   color: #0f172a;
 }
 
 @media (max-width: 767px) {
-  .desktopFilterAll {
+  .desktopFilterWrapper {
     display: none !important;
+  }
+  .mobileTabList {
+    display: flex !important;
   }
 }

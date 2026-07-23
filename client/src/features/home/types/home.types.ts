@@ -58,7 +58,7 @@ export type HomeStanding = {
   played: number;
   goalDifference: number;
   points: number;
-  qualificationStatus?: "Lolos" | "Gugur" | "Menunggu Keputusan" | "Pending";
+  qualificationStatus?: "Lolos" | "Gugur" | "Menunggu keputusan" | "Menunggu hasil" | "Belum ditentukan" | "Pending";
 };
 
 export type HomeAward = {

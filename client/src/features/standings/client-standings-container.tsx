@@ -35,10 +35,6 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
     );
   }
 
-  const visibleGroups = activeGroupId
-    ? data.groups.filter((g) => g.group.id === activeGroupId)
-    : data.groups;
-
   const statusLabel =
     data.status === "final"
       ? "Klasemen Final"
@@ -67,15 +63,19 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
 
       <GroupNavigation activeGroupId={activeGroupId} />
 
-      {visibleGroups.map((groupStandings) => (
-        <GroupStandingsSection
-          key={groupStandings.group.id}
-          groupStandings={groupStandings}
-          panelId={`panel-${groupStandings.group.id}`}
-          tabId={`tab-${groupStandings.group.id}`}
-          isDefaultHideOnMobile={activeGroupId === null && groupStandings.group.id === "GRPB"}
-        />
-      ))}
+      {data.groups.map((groupStandings) => {
+        const isHidden = activeGroupId !== null && activeGroupId !== groupStandings.group.id;
+
+        return (
+          <GroupStandingsSection
+            key={groupStandings.group.id}
+            groupStandings={groupStandings}
+            panelId={`panel-${groupStandings.group.id}`}
+            tabId={`tab-mobile-${groupStandings.group.id}`}
+            hidden={isHidden}
+          />
+        );
+      })}
 
       <QualificationExplanation />
 

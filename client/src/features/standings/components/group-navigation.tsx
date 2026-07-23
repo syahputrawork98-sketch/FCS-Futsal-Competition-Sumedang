@@ -12,7 +12,7 @@ export function GroupNavigation({ activeGroupId }: GroupNavigationProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const tabListRef = useRef<HTMLDivElement>(null);
+  const mobileTabListRef = useRef<HTMLDivElement>(null);
 
   const groupTabs = [
     { id: "GRPA", label: "Grup A", panelId: "panel-GRPA" },
@@ -32,7 +32,7 @@ export function GroupNavigation({ activeGroupId }: GroupNavigationProps) {
     router.replace(newUrl, { scroll: false });
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
+  const handleMobileKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, currentIndex: number) => {
     let nextIndex = currentIndex;
     if (e.key === "ArrowRight") {
       e.preventDefault();
@@ -45,50 +45,69 @@ export function GroupNavigation({ activeGroupId }: GroupNavigationProps) {
     if (nextIndex !== currentIndex) {
       const nextTab = groupTabs[nextIndex];
       handleGroupSelect(nextTab.id);
-      const tabElements = tabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
+      const tabElements = mobileTabListRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]');
       if (tabElements && tabElements[nextIndex]) {
         tabElements[nextIndex].focus();
       }
     }
   };
 
-  // Determine active tab for mobile when activeGroupId === null: default is GRPA
+  // Mobile active tab logic: default is GRPA when activeGroupId is null
   const mobileActiveTabId = activeGroupId === null ? "GRPA" : activeGroupId;
 
   return (
     <nav className={styles.nav} aria-label="Filter Grup Klasemen">
-      <div className={styles.tabList}>
-        {/* Desktop Filter All Button - Regular Button (not part of ARIA tablist) */}
+      {/* 1. Desktop Filter Navigation (Regular buttons, NO role="tablist", NO role="tab") */}
+      <div className={styles.desktopFilterWrapper}>
         <button
           type="button"
-          className={`${styles.desktopFilterAll} ${activeGroupId === null ? styles.active : ""}`}
+          className={`${styles.desktopBtn} ${activeGroupId === null ? styles.desktopActive : ""}`}
           onClick={() => handleGroupSelect(null)}
         >
           Semua Grup
         </button>
+        <button
+          type="button"
+          className={`${styles.desktopBtn} ${activeGroupId === "GRPA" ? styles.desktopActive : ""}`}
+          onClick={() => handleGroupSelect("GRPA")}
+        >
+          Grup A
+        </button>
+        <button
+          type="button"
+          className={`${styles.desktopBtn} ${activeGroupId === "GRPB" ? styles.desktopActive : ""}`}
+          onClick={() => handleGroupSelect("GRPB")}
+        >
+          Grup B
+        </button>
+      </div>
 
-        {/* Mobile / Shared ARIA Tablist containing ONLY Grup A and Grup B */}
-        <div ref={tabListRef} role="tablist" aria-label="Tab Grup Klasemen" style={{ display: "inline-flex", gap: "0.5rem" }}>
-          {groupTabs.map((tab, idx) => {
-            const isSelected = mobileActiveTabId === tab.id;
-            return (
-              <button
-                key={tab.id}
-                id={`tab-${tab.id}`}
-                type="button"
-                role="tab"
-                aria-selected={isSelected}
-                aria-controls={tab.panelId}
-                tabIndex={isSelected ? 0 : -1}
-                className={`${styles.tabItem} ${isSelected ? styles.active : ""}`}
-                onClick={() => handleGroupSelect(tab.id)}
-                onKeyDown={(e) => handleKeyDown(e, idx)}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
+      {/* 2. Mobile Tab Navigation (Strict ARIA Tablist pattern for Mobile, ONLY Grup A & Grup B) */}
+      <div
+        ref={mobileTabListRef}
+        role="tablist"
+        aria-label="Tab Klasemen Mobile"
+        className={styles.mobileTabList}
+      >
+        {groupTabs.map((tab, idx) => {
+          const isSelected = mobileActiveTabId === tab.id;
+          return (
+            <button
+              key={tab.id}
+              id={`tab-mobile-${tab.id}`}
+              type="button"
+              role="tab"
+              aria-selected={isSelected}
+              aria-controls={tab.panelId}
+              tabIndex={isSelected ? 0 : -1}
+              className={`${styles.mobileTab} ${isSelected ? styles.mobileActive : ""}`}
+              onClick={() => handleGroupSelect(tab.id)}
+              onKeyDown={(e) => handleMobileKeyDown(e, idx)}
+            >
+              {tab.label}
+            </button>
+          );
+        })}
       </div>
     </nav>
   );

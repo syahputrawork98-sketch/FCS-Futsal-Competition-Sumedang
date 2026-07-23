@@ -40,14 +40,20 @@ export function StandingsTable({ groupName, rows, status }: StandingsTableProps)
     return `${gd}`;
   };
 
-  const renderStatusBadge = (rowStatus: StandingsTeamRow["qualificationStatus"]) => {
-    if (rowStatus === "qualified") {
+  const renderStatusBadge = (row: StandingsTeamRow) => {
+    if (row.qualificationStatus === "qualified") {
       return <span className={styles.badgeQualified}>Lolos</span>;
     }
-    if (rowStatus === "eliminated") {
+    if (row.qualificationStatus === "eliminated") {
       return <span className={styles.badgeEliminated}>Gugur</span>;
     }
-    return <span className={styles.badgePending}>Menunggu keputusan</span>;
+    if (row.rankingResolution === "unresolved_tie") {
+      return <span className={styles.badgePending}>Menunggu keputusan</span>;
+    }
+    if (status === "provisional") {
+      return <span className={styles.badgePending}>Menunggu hasil</span>;
+    }
+    return <span className={styles.badgePending}>Belum ditentukan</span>;
   };
 
   return (
@@ -140,7 +146,7 @@ export function StandingsTable({ groupName, rows, status }: StandingsTableProps)
                   </td>
                   <td className={`${styles.td} ${styles.pointsCol}`}>{formatValue(row.points)}</td>
                   <td className={`${styles.td} ${styles.statusCol}`}>
-                    {renderStatusBadge(row.qualificationStatus)}
+                    {renderStatusBadge(row)}
                   </td>
                   <td className={`${styles.td} ${styles.mobileOnly}`}>
                     <button
@@ -158,7 +164,7 @@ export function StandingsTable({ groupName, rows, status }: StandingsTableProps)
                 {isExpanded && (
                   <tr id={detailId} className={`${styles.mobileOnly} ${styles.mobileDetailRow}`}>
                     <td colSpan={7} style={{ padding: 0 }}>
-                      <MobileStandingsRowDetails row={row} id={`${detailId}-content`} />
+                      <MobileStandingsRowDetails row={row} id={`${detailId}-content`} groupStatus={status} />
                     </td>
                   </tr>
                 )}

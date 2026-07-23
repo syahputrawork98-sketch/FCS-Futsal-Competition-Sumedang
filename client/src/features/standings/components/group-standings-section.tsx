@@ -9,14 +9,14 @@ type GroupStandingsSectionProps = {
   groupStandings: GroupStandings;
   panelId?: string;
   tabId?: string;
-  isDefaultHideOnMobile?: boolean;
+  hidden?: boolean;
 };
 
 export function GroupStandingsSection({
   groupStandings,
   panelId,
   tabId,
-  isDefaultHideOnMobile,
+  hidden,
 }: GroupStandingsSectionProps) {
   const { group, rows, completedOfficialMatches, totalMatches, status } = groupStandings;
 
@@ -29,14 +29,13 @@ export function GroupStandingsSection({
       ? "Partial"
       : "Belum Dimulai";
 
-  const containerClass = `${styles.section} ${isDefaultHideOnMobile ? styles.mobileHideWhenDefault : ""}`;
-
   return (
     <section
       id={panelId}
       role="tabpanel"
       aria-labelledby={tabId}
-      className={containerClass}
+      hidden={hidden}
+      className={styles.section}
       aria-label={`Klasemen ${group.name}`}
     >
       <div className={styles.header}>
