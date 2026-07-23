@@ -1,0 +1,16 @@
+.container {
+  max-width: var(--container-max-width, 1200px);
+  margin: 0 auto;
+  padding: var(--space-6, 1.5rem) var(--space-4, 1rem);
+}
+
+.notice {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-md, 8px);
+  padding: 1rem 1.25rem;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #94a3b8);
+  line-height: 1.5;
+  margin-top: 1rem;
+}

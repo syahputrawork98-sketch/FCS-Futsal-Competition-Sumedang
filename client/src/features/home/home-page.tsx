@@ -11,6 +11,7 @@ import { LatestNewsSection } from "./components/latest-news-section";
 import { GalleryPreviewSection } from "./components/gallery-preview-section";
 import { SponsorsSection } from "./components/sponsors-section";
 import { DataSimulationNotice } from "./components/data-simulation-notice";
+import { getHomeStandingsPreviewData } from "@/features/standings/lib/map-standings-to-home-preview";
 import styles from "./home-page.module.css";
 
 export function HomePage() {
@@ -20,7 +21,6 @@ export function HomePage() {
     featuredFinal,
     metrics,
     latestResults,
-    standings,
     bracket,
     awards,
     teams,
@@ -29,6 +29,8 @@ export function HomePage() {
     gallery,
     sponsors,
   } = homePrototypeData;
+
+  const standingsData = getHomeStandingsPreviewData();
 
   return (
     <div className={styles.container}>
@@ -49,7 +51,7 @@ export function HomePage() {
       <LatestResultsSection results={latestResults} />
 
       {/* 4. Klasemen Akhir */}
-      <StandingsPreviewSection standings={standings} />
+      <StandingsPreviewSection standings={standingsData} />
 
       {/* 5. Bracket Fase Gugur */}
       <TournamentBracketSection bracket={bracket} />

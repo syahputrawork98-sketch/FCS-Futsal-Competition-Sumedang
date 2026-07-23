@@ -43,6 +43,25 @@
   gap: var(--space-2, 0.5rem);
 }
 
+.activeLinkPill {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text-main, #ffffff);
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-md, 6px);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.activeLinkPill:hover {
+  background: rgba(56, 189, 248, 0.25);
+}
+
 .disabledLinkPill {
   display: flex;
   align-items: center;

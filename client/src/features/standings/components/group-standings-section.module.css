@@ -1,0 +1,46 @@
+.section {
+  margin-bottom: var(--space-8, 2rem);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-4, 1rem);
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.titleGroup {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.title {
+  font-size: 1.375rem;
+  font-weight: 800;
+  color: var(--color-text-main, #ffffff);
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #94a3b8);
+  font-weight: 600;
+}
+
+.groupMatchesLink {
+  font-size: 0.8125rem;
+  color: var(--color-accent-blue, #38bdf8);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: color 0.15s ease;
+}
+
+.groupMatchesLink:hover {
+  color: #ffffff;
+}

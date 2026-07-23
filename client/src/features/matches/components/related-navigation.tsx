@@ -1,46 +1,42 @@
 import React from "react";
-import { Table, GitMerge, Shield } from "lucide-react";
+import Link from "next/link";
+import { Table, GitMerge, Shield, ArrowRight } from "lucide-react";
 import styles from "./related-navigation.module.css";
 
 export function RelatedNavigation() {
-  const items = [
-    {
-      title: "Klasemen Grup",
-      icon: Table,
-      note: "Segera tersedia",
-    },
-    {
-      title: "Bracket Fase Gugur",
-      icon: GitMerge,
-      note: "Segera tersedia",
-    },
-    {
-      title: "Daftar Tim Peserta",
-      icon: Shield,
-      note: "Segera tersedia",
-    },
-  ];
-
   return (
     <section className={styles.container} aria-label="Navigasi Terkait">
       <h3 className={styles.title}>Lihat Juga</h3>
       <div className={styles.grid}>
-        {items.map((item) => {
-          const Icon = item.icon;
-          return (
-            <div
-              key={item.title}
-              className={styles.cardDisabled}
-              title={`${item.title} akan segera hadir pada plan berikutnya`}
-            >
-              <div className={styles.cardInfo}>
-                <Icon size={18} className={styles.icon} aria-hidden="true" />
-                <span className={styles.label}>{item.title}</span>
-              </div>
-              <span className={styles.upcomingBadge}>{item.note}</span>
-            </div>
-          );
-        })}
+        <Link href="/klasemen" className={styles.cardActive}>
+          <div className={styles.cardInfo}>
+            <Table size={18} className={styles.iconActive} aria-hidden="true" />
+            <span className={styles.labelActive}>Klasemen Grup</span>
+          </div>
+          <ArrowRight size={16} color="var(--color-accent-blue, #38bdf8)" aria-hidden="true" />
+        </Link>
+
+        <div
+          className={styles.cardDisabled}
+          title="Bracket Fase Gugur akan segera hadir pada tahap berikutnya"
+        >
+          <div className={styles.cardInfo}>
+            <GitMerge size={18} className={styles.icon} aria-hidden="true" />
+            <span className={styles.label}>Bracket Fase Gugur</span>
+          </div>
+          <span className={styles.upcomingBadge}>Segera</span>
+        </div>
+
+        <div
+          className={styles.cardDisabled}
+          title="Daftar Tim Peserta akan segera hadir pada tahap berikutnya"
+        >
+          <div className={styles.cardInfo}>
+            <Shield size={18} className={styles.icon} aria-hidden="true" />
+            <span className={styles.label}>Daftar Tim Peserta</span>
+          </div>
+          <span className={styles.upcomingBadge}>Segera</span>
+        </div>
       </div>
     </section>
   );

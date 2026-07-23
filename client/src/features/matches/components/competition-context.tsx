@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Trophy, Calendar, Users, CheckCircle2 } from "lucide-react";
 import type { CompetitionMetadata } from "../types/matches.types";
 import styles from "./competition-context.module.css";
@@ -32,12 +33,10 @@ export function CompetitionContext({ competition }: CompetitionContextProps) {
         </div>
       </div>
 
-      {/* Directive 4: Disabled pills for unbuilt routes (Klasemen, Bracket) */}
       <div className={styles.actions}>
-        <div className={styles.disabledLinkPill} title="Halaman Klasemen akan segera hadir pada tahap berikutnya">
+        <Link href="/klasemen" className={styles.activeLinkPill}>
           <span>Klasemen</span>
-          <span className={styles.upcomingTag}>Segera</span>
-        </div>
+        </Link>
 
         <div className={styles.disabledLinkPill} title="Halaman Bracket akan segera hadir pada tahap berikutnya">
           <span>Bracket</span>
