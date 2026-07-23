@@ -54,6 +54,25 @@ function getEventStatusSchema(status: string): string {
   }
 }
 
+/**
+ * Task 2: Safely parses NEXT_PUBLIC_SITE_URL and constructs canonical URL using new URL().
+ * Returns undefined if env variable is missing, empty, or invalid.
+ */
+function getCanonicalMatchUrl(matchId: string): string | undefined {
+  const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  if (!rawSiteUrl) return undefined;
+
+  try {
+    const parsed = new URL(rawSiteUrl);
+    if ((parsed.protocol === "http:" || parsed.protocol === "https:") && parsed.hostname) {
+      return new URL(`/pertandingan/${matchId}`, parsed).toString();
+    }
+  } catch {
+    // Invalid URL format - return undefined without throwing error
+  }
+  return undefined;
+}
+
 export default async function MatchDetailRoute({ params }: PageProps) {
   const { matchId } = await params;
   const data = resolveMatchDetail(matchId);
@@ -62,10 +81,7 @@ export default async function MatchDetailRoute({ params }: PageProps) {
     notFound();
   }
 
-  // Requirement 3: Optional base URL from environment variable only.
-  // Do NOT fallback to assumed domain, localhost, or example domain.
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
-  const canonicalUrl = baseUrl ? `${baseUrl}/pertandingan/${data.match.id}` : undefined;
+  const canonicalUrl = getCanonicalMatchUrl(data.match.id);
 
   const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",

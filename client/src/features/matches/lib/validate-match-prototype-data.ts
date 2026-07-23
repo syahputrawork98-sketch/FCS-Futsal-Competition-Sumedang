@@ -79,15 +79,15 @@ export function validateMatchPrototypeData(): void {
 
     // groupId validity and phase matching
     if (m.groupId !== null) {
-      if (!groupMap.has(m.groupId)) {
+      const group = groupMap.get(m.groupId);
+      if (!group) {
         throw new Error(
           `[Data Integrity Error] Match ${m.id} references invalid groupId: '${m.groupId}'.`
         );
       }
-      // Group phase (FAS01) must have groupId; knockout phases (FAS02, FAS03, FAS04) should not have group
-      if (m.phaseId !== "FAS01") {
+      if (group.phaseId !== m.phaseId) {
         throw new Error(
-          `[Data Integrity Error] Match ${m.id} in phase '${m.phaseId}' should not have groupId '${m.groupId}'.`
+          `[Data Integrity Error] Match ${m.id} in phase '${m.phaseId}' references group '${group.id}' belonging to phase '${group.phaseId}'.`
         );
       }
     } else {
