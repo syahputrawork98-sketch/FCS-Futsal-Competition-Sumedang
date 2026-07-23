@@ -54,13 +54,13 @@ export function MatchMetadataGrid({
         </div>
       )}
 
-      {/* Phase */}
+      {/* Phase - Point 11 Fix: Fase Kompetisi */}
       <div className={styles.item}>
         <div className={styles.iconBox}>
           <Trophy size={18} aria-hidden="true" />
         </div>
         <div className={styles.details}>
-          <span className={styles.label}>Fase Competisi</span>
+          <span className={styles.label}>Fase Kompetisi</span>
           <span className={styles.value}>{phase.name}</span>
         </div>
       </div>

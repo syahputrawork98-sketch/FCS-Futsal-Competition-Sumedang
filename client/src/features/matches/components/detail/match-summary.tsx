@@ -9,6 +9,7 @@ type MatchSummaryProps = {
   teamA: MatchTeam;
   teamB: MatchTeam;
   scorers: MatchScorerSummary[];
+  winnerTeamId: string | null;
 };
 
 export function MatchSummary({
@@ -16,17 +17,39 @@ export function MatchSummary({
   teamA,
   teamB,
   scorers,
+  winnerTeamId,
 }: MatchSummaryProps) {
   const teamAScorers = scorers.filter((s) => s.teamId === teamA.id);
   const teamBScorers = scorers.filter((s) => s.teamId === teamB.id);
+
+  const winnerTeam = winnerTeamId
+    ? winnerTeamId === teamA.id
+      ? teamA
+      : teamB
+    : null;
 
   return (
     <section id="ringkasan" className={styles.card} aria-label="Ringkasan Pertandingan">
       <h3 className={styles.title}>
         <FileText size={18} aria-hidden="true" color="var(--color-accent-blue, #38bdf8)" />
-        <span>Ringkasan Pertandingan</span>
+        <span>Ringkasan Hasil & Pencetak Gol</span>
       </h3>
 
+      {/* Final result & Winner banner */}
+      <div style={{ display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+        {match.teamAScore !== null && match.teamBScore !== null && (
+          <span style={{ fontSize: "1rem", fontWeight: 800, color: "#ffffff" }}>
+            Skor Akhir: {match.teamAScore} – {match.teamBScore}
+          </span>
+        )}
+        {winnerTeam && (
+          <span style={{ fontSize: "0.875rem", fontWeight: 700, color: "#f59e0b" }}>
+            🏆 Pemenang: {winnerTeam.name}
+          </span>
+        )}
+      </div>
+
+      {/* Scorers Grid */}
       <div className={styles.grid}>
         {/* Team A Scorers */}
         <div className={styles.teamScorers}>
@@ -67,7 +90,14 @@ export function MatchSummary({
         </div>
       </div>
 
-      {/* Match note or penalty note if present */}
+      {/* Penalty note if present (Rule 1 & Point 6) */}
+      {match.penaltyResult && (
+        <div className={styles.noteBox}>
+          <strong>Hasil Adu Penalti:</strong> {winnerTeam?.name} menang adu penalti {match.penaltyResult.teamAScore}–{match.penaltyResult.teamBScore}
+        </div>
+      )}
+
+      {/* Match note if present */}
       {match.note && <div className={styles.noteBox}>Catatan: {match.note}</div>}
     </section>
   );

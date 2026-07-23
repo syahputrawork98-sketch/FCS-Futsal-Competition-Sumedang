@@ -1,7 +1,7 @@
 import React from "react";
 import { History } from "lucide-react";
 import type { ResolvedMatchTimelineItem } from "../../types/match-detail.types";
-import { getMatchEventTypeLabel } from "../../lib/match-detail-formatters";
+import { getMatchEventTypeLabel, getPeriodLabel } from "../../lib/match-detail-formatters";
 import styles from "./match-timeline.module.css";
 
 type MatchTimelineProps = {
@@ -34,10 +34,13 @@ export function MatchTimeline({ timeline }: MatchTimelineProps) {
         {timeline.map((item) => {
           const isGoal = item.type === "goal" || item.type === "own_goal";
           const isYellow = item.type === "yellow_card";
+          const periodText = getPeriodLabel(item.period);
 
           return (
             <li key={item.id} className={styles.item}>
-              <div className={styles.minuteBadge}>{item.minute}&apos;</div>
+              <div className={styles.minuteBadge}>
+                {item.minute}&apos;
+              </div>
 
               <div className={styles.contentCard}>
                 <div className={styles.eventDetails}>
@@ -56,6 +59,11 @@ export function MatchTimeline({ timeline }: MatchTimelineProps) {
                     >
                       {getMatchEventTypeLabel(item.type)}
                     </span>
+                    {periodText && (
+                      <span style={{ fontSize: "0.75rem", color: "var(--color-accent-amber)" }}>
+                        • {periodText}
+                      </span>
+                    )}
                     <span className={styles.teamLabel}>• {item.team.name}</span>
                   </div>
 

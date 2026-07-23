@@ -11,14 +11,31 @@ import {
 } from "../data/match-officials-prototype-data";
 import { deriveMatchTimeline } from "./derive-match-timeline";
 import { deriveMatchScorers } from "./derive-match-summary";
+import { validateMatchPrototypeData } from "./validate-match-prototype-data";
+
+// Run data integrity validation on module load / resolver invocation
+let validated = false;
+function ensureValidated() {
+  if (!validated) {
+    validateMatchPrototypeData();
+    validated = true;
+  }
+}
 
 export function resolveMatchDetail(matchId: string): MatchDetailPageData | null {
+  ensureValidated();
+
   if (!matchId) return null;
 
-  const match = matchesPrototypeData.matches.find(
-    (m) => m.id.toUpperCase() === matchId.toUpperCase()
-  );
+  // Strict check: Match ID MUST match exact uppercase PRT001..PRT016
+  // No toUpperCase() conversion allowed on matchId input
+  const validPattern = /^PRT0(0[1-9]|1[0-6])$/;
+  if (!validPattern.test(matchId)) {
+    return null;
+  }
 
+  // Exact match search without toUpperCase()
+  const match = matchesPrototypeData.matches.find((m) => m.id === matchId);
   if (!match) return null;
 
   const teamMap = new Map(matchesPrototypeData.teams.map((t) => [t.id, t]));
@@ -30,7 +47,7 @@ export function resolveMatchDetail(matchId: string): MatchDetailPageData | null 
   const teamB = teamMap.get(match.teamBId);
   const phase = phaseMap.get(match.phaseId);
   const group = match.groupId ? groupMap.get(match.groupId) || null : null;
-  const venue = venueMap.get(match.venueId) || null;
+  const venue = match.venueId ? venueMap.get(match.venueId) || null : null;
 
   if (!teamA || !teamB || !phase) return null;
 

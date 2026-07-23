@@ -10,6 +10,7 @@ type MatchTeamSectionProps = {
   teamB: MatchTeam;
   teamAOfficials: TeamOfficialSummary[];
   teamBOfficials: TeamOfficialSummary[];
+  lineups?: unknown | null;
 };
 
 export function MatchTeamSection({
@@ -17,14 +18,17 @@ export function MatchTeamSection({
   teamB,
   teamAOfficials,
   teamBOfficials,
+  lineups = null,
 }: MatchTeamSectionProps) {
   return (
     <div id="tim" className={styles.container}>
-      {/* Rule 5 & 6: Lineups unavailable state */}
-      <MatchSectionUnavailable
-        title="Susunan Pemain Pertandingan Belum Tersedia"
-        description="Data daftar susunan pemain (lineup) starter dan cadangan per pertandingan belum dicatat dalam database prototype ini."
-      />
+      {/* Lineup unavailable state if lineups === null */}
+      {lineups === null && (
+        <MatchSectionUnavailable
+          title="Susunan Pemain Pertandingan Belum Tersedia"
+          description="Data daftar susunan pemain (lineup) starter dan cadangan per pertandingan belum dicatat dalam database prototype ini."
+        />
+      )}
 
       {/* Team Officials Card */}
       <section className={styles.officialsCard} aria-label="Official Tim">
@@ -37,37 +41,49 @@ export function MatchTeamSection({
           {/* Team A Officials */}
           <div className={styles.teamColumn}>
             <h4 className={styles.teamName}>{teamA.name}</h4>
-            <div className={styles.officialList}>
-              {teamAOfficials.map((official) => (
-                <div key={official.id} className={styles.officialItem}>
-                  <div className={styles.avatar} aria-hidden="true">
-                    {official.name.slice(0, 2).toUpperCase()}
+            {teamAOfficials.length > 0 ? (
+              <div className={styles.officialList}>
+                {teamAOfficials.map((official) => (
+                  <div key={official.id} className={styles.officialItem}>
+                    <div className={styles.avatar} aria-hidden="true">
+                      {official.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className={styles.officialDetails}>
+                      <span className={styles.name}>{official.name}</span>
+                      <span className={styles.role}>{official.role}</span>
+                    </div>
                   </div>
-                  <div className={styles.officialDetails}>
-                    <span className={styles.name}>{official.name}</span>
-                    <span className={styles.role}>{official.role}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <span style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)", fontStyle: "italic" }}>
+                Official {teamA.name} belum terdaftar.
+              </span>
+            )}
           </div>
 
           {/* Team B Officials */}
           <div className={styles.teamColumn}>
             <h4 className={styles.teamName}>{teamB.name}</h4>
-            <div className={styles.officialList}>
-              {teamBOfficials.map((official) => (
-                <div key={official.id} className={styles.officialItem}>
-                  <div className={styles.avatar} aria-hidden="true">
-                    {official.name.slice(0, 2).toUpperCase()}
+            {teamBOfficials.length > 0 ? (
+              <div className={styles.officialList}>
+                {teamBOfficials.map((official) => (
+                  <div key={official.id} className={styles.officialItem}>
+                    <div className={styles.avatar} aria-hidden="true">
+                      {official.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className={styles.officialDetails}>
+                      <span className={styles.name}>{official.name}</span>
+                      <span className={styles.role}>{official.role}</span>
+                    </div>
                   </div>
-                  <div className={styles.officialDetails}>
-                    <span className={styles.name}>{official.name}</span>
-                    <span className={styles.role}>{official.role}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <span style={{ fontSize: "0.8125rem", color: "var(--color-text-muted)", fontStyle: "italic" }}>
+                Official {teamB.name} belum terdaftar.
+              </span>
+            )}
           </div>
         </div>
       </section>

@@ -1,15 +1,24 @@
 import React from "react";
 import styles from "./match-content-navigation.module.css";
 
-export function MatchContentNavigation() {
+type MatchContentNavigationProps = {
+  hasVenue?: boolean;
+};
+
+export function MatchContentNavigation({
+  hasVenue = true,
+}: MatchContentNavigationProps) {
   const items = [
     { label: "Ringkasan", href: "#ringkasan" },
     { label: "Timeline", href: "#timeline" },
     { label: "Statistik", href: "#statistik" },
     { label: "Tim & Official", href: "#tim" },
     { label: "Perangkat", href: "#perangkat" },
-    { label: "Venue", href: "#venue" },
   ];
+
+  if (hasVenue) {
+    items.push({ label: "Venue", href: "#venue" });
+  }
 
   return (
     <nav className={styles.navContainer} aria-label="Navigasi Konten Detail">

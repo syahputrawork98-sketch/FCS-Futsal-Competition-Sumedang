@@ -15,10 +15,10 @@ export function deriveMatchTimeline(
     matchPlayersPrototypeData.map((p) => [p.id, p])
   );
 
-  // Filter only verified events for the target match
+  // Filter only verified events
   const verifiedEvents = events.filter((e) => e.verificationStatus === "verified");
 
-  // Sort events by minute ASC, then by id ASC
+  // Sort by minute ASC, then id ASC
   const sortedEvents = [...verifiedEvents].sort((a, b) => {
     if (a.minute !== b.minute) return a.minute - b.minute;
     return a.id.localeCompare(b.id);
@@ -27,19 +27,44 @@ export function deriveMatchTimeline(
   let teamAScoreCounter = 0;
   let teamBScoreCounter = 0;
 
-  return sortedEvents.map((evt) => {
+  const result: ResolvedMatchTimelineItem[] = [];
+
+  for (const evt of sortedEvents) {
+    // Validate team ID strictly
+    if (evt.teamId !== teamA.id && evt.teamId !== teamB.id) {
+      throw new Error(
+        `[Timeline Integrity Error] Event ${evt.id} has invalid teamId '${evt.teamId}'. Expected '${teamA.id}' or '${teamB.id}'.`
+      );
+    }
+
     const team = evt.teamId === teamA.id ? teamA : teamB;
-    const player = evt.playerId ? playerMap.get(evt.playerId) || null : null;
-    const relatedPlayer = evt.relatedPlayerId
-      ? playerMap.get(evt.relatedPlayerId) || null
-      : null;
+
+    let player: MatchPlayerSummary | null = null;
+    if (evt.playerId) {
+      player = playerMap.get(evt.playerId) || null;
+      if (!player) {
+        throw new Error(
+          `[Timeline Integrity Error] Event ${evt.id} references non-existent playerId '${evt.playerId}'.`
+        );
+      }
+    }
+
+    let relatedPlayer: MatchPlayerSummary | null = null;
+    if (evt.relatedPlayerId) {
+      relatedPlayer = playerMap.get(evt.relatedPlayerId) || null;
+      if (!relatedPlayer) {
+        throw new Error(
+          `[Timeline Integrity Error] Event ${evt.id} references non-existent relatedPlayerId '${evt.relatedPlayerId}'.`
+        );
+      }
+    }
 
     let scoreAfterEvent: { teamAScore: number; teamBScore: number } | null = null;
 
     if (evt.type === "goal") {
       if (evt.teamId === teamA.id) {
         teamAScoreCounter += 1;
-      } else if (evt.teamId === teamB.id) {
+      } else {
         teamBScoreCounter += 1;
       }
       scoreAfterEvent = {
@@ -47,10 +72,9 @@ export function deriveMatchTimeline(
         teamBScore: teamBScoreCounter,
       };
     } else if (evt.type === "own_goal") {
-      // Own goal adds score to opposing team
       if (evt.teamId === teamA.id) {
         teamBScoreCounter += 1;
-      } else if (evt.teamId === teamB.id) {
+      } else {
         teamAScoreCounter += 1;
       }
       scoreAfterEvent = {
@@ -59,12 +83,14 @@ export function deriveMatchTimeline(
       };
     }
 
-    return {
+    result.push({
       ...evt,
       team,
       player,
       relatedPlayer,
       scoreAfterEvent,
-    };
-  });
+    });
+  }
+
+  return result;
 }

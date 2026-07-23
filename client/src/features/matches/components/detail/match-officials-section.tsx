@@ -4,6 +4,7 @@ import type {
   MatchOfficialAssignment,
   MatchOfficialSummary,
 } from "../../types/match-detail.types";
+import { MatchSectionUnavailable } from "./match-section-unavailable";
 import styles from "./match-officials-section.module.css";
 
 type MatchOfficialsSectionProps = {
@@ -15,7 +16,16 @@ type MatchOfficialsSectionProps = {
 export function MatchOfficialsSection({
   officials,
 }: MatchOfficialsSectionProps) {
-  if (officials.length === 0) return null;
+  if (officials.length === 0) {
+    return (
+      <div id="perangkat">
+        <MatchSectionUnavailable
+          title="Perangkat Pertandingan Belum Ditugaskan"
+          description="Data penugasan wasit dan perangkat pertandingan belum dicatat untuk laga ini."
+        />
+      </div>
+    );
+  }
 
   return (
     <section id="perangkat" className={styles.card} aria-label="Perangkat Pertandingan">

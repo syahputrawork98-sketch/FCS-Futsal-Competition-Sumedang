@@ -35,3 +35,10 @@
     opacity: 0.8;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .box {
+    animation: none;
+    opacity: 0.6;
+  }
+}

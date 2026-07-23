@@ -51,7 +51,7 @@ export function MatchDetailPage({ data }: MatchDetailPageProps) {
 
       <MatchPrimaryActions />
 
-      <MatchContentNavigation />
+      <MatchContentNavigation hasVenue={Boolean(data.venue)} />
 
       <div className={styles.contentBody}>
         <MatchSummary
@@ -59,17 +59,19 @@ export function MatchDetailPage({ data }: MatchDetailPageProps) {
           teamA={data.teamA}
           teamB={data.teamB}
           scorers={data.scorers}
+          winnerTeamId={data.winnerTeamId}
         />
 
         <MatchTimeline timeline={data.timeline} />
 
-        <MatchStatisticsSection />
+        <MatchStatisticsSection statistics={data.statistics} />
 
         <MatchTeamSection
           teamA={data.teamA}
           teamB={data.teamB}
           teamAOfficials={data.teamAOfficials}
           teamBOfficials={data.teamBOfficials}
+          lineups={data.lineups}
         />
 
         <MatchOfficialsSection officials={data.matchOfficials} />

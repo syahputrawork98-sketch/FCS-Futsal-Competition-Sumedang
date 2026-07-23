@@ -38,6 +38,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+function getEventStatusSchema(status: string): string {
+  switch (status) {
+    case "finished":
+      return "https://schema.org/EventFinished";
+    case "live":
+      return "https://schema.org/EventInProgress";
+    case "postponed":
+      return "https://schema.org/EventPostponed";
+    case "cancelled":
+      return "https://schema.org/EventCancelled";
+    case "scheduled":
+    default:
+      return "https://schema.org/EventScheduled";
+  }
+}
+
 export default async function MatchDetailRoute({ params }: PageProps) {
   const { matchId } = await params;
   const data = resolveMatchDetail(matchId);
@@ -46,16 +62,14 @@ export default async function MatchDetailRoute({ params }: PageProps) {
     notFound();
   }
 
-  // Rule 8: SportsEvent JSON-LD with strictly available facts
+  // Point 9: Complete JSON-LD with url, schema status mapping, and safe serialization
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
     name: `${data.teamA.name} vs ${data.teamB.name}`,
+    url: `https://fcs.sumedang.go.id/pertandingan/${data.match.id}`,
     startDate: `${data.match.date}T${data.match.startTime}:00+07:00`,
-    eventStatus:
-      data.match.status === "finished"
-        ? "https://schema.org/EventFinished"
-        : "https://schema.org/EventScheduled",
+    eventStatus: getEventStatusSchema(data.match.status),
     location: data.venue
       ? {
           "@type": "Place",
@@ -78,11 +92,14 @@ export default async function MatchDetailRoute({ params }: PageProps) {
     },
   };
 
+  // Safe JSON serialization against script injection
+  const safeJsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");
+
   return (
     <PageContainer>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLdString }}
       />
       <MatchDetailPage data={data} />
     </PageContainer>

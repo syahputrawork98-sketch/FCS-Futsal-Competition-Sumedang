@@ -1,6 +1,6 @@
 import React from "react";
 import type { MatchRecord, MatchTeam } from "../../types/matches.types";
-import { getMatchStatusLabel, getResultStatusLabel } from "../../lib/match-formatters";
+import { formatMatchTime, getMatchStatusLabel, getResultStatusLabel } from "../../lib/match-formatters";
 import styles from "./match-scoreboard.module.css";
 
 type MatchScoreboardProps = {
@@ -16,9 +16,28 @@ export function MatchScoreboard({
   teamB,
   winnerTeamId,
 }: MatchScoreboardProps) {
-  const hasScore = match.teamAScore !== null && match.teamBScore !== null;
-  const isTeamAWinner = winnerTeamId === teamA.id;
-  const isTeamBWinner = winnerTeamId === teamB.id;
+  const isFinished = match.status === "finished";
+  const isLive = match.status === "live";
+  const isScheduled = match.status === "scheduled";
+  const isPostponed = match.status === "postponed";
+  const isCancelled = match.status === "cancelled";
+
+  const hasScore = (isFinished || isLive) && match.teamAScore !== null && match.teamBScore !== null;
+
+  const isTeamAWinner = isFinished && winnerTeamId === teamA.id;
+  const isTeamBWinner = isFinished && winnerTeamId === teamB.id;
+
+  // Safe aria-label
+  let scoreAriaLabel = `Pertandingan ${teamA.name} vs ${teamB.name}`;
+  if (hasScore) {
+    scoreAriaLabel = `Skor ${match.teamAScore} - ${match.teamBScore}`;
+  } else if (isScheduled) {
+    scoreAriaLabel = `Pertandingan terjadwal kickoff ${formatMatchTime(match.startTime)} WIB`;
+  } else if (isPostponed) {
+    scoreAriaLabel = "Pertandingan ditunda";
+  } else if (isCancelled) {
+    scoreAriaLabel = "Pertandingan dibatalkan";
+  }
 
   return (
     <section className={styles.scoreboardCard} aria-label="Scoreboard Utama">
@@ -27,7 +46,7 @@ export function MatchScoreboard({
           <span className={styles.statusBadge}>
             {getMatchStatusLabel(match.status)}
           </span>
-          {match.resultStatus && (
+          {match.resultStatus && isFinished && (
             <span className={styles.officialBadge}>
               {getResultStatusLabel(match.resultStatus)}
             </span>
@@ -56,7 +75,7 @@ export function MatchScoreboard({
         </div>
 
         {/* Score Box */}
-        <div className={styles.scoreBox} aria-label={`Skor ${match.teamAScore} - ${match.teamBScore}`}>
+        <div className={styles.scoreBox} aria-label={scoreAriaLabel}>
           {hasScore ? (
             <>
               <span
@@ -75,9 +94,19 @@ export function MatchScoreboard({
                 {match.teamBScore}
               </span>
             </>
-          ) : (
-            <span className={styles.scoreDigit}>VS</span>
-          )}
+          ) : isScheduled ? (
+            <span style={{ fontSize: "1rem", fontWeight: 700, color: "var(--color-accent-amber)" }}>
+              {formatMatchTime(match.startTime)} WIB
+            </span>
+          ) : isPostponed ? (
+            <span style={{ fontSize: "0.9375rem", fontWeight: 700, color: "var(--color-text-muted)" }}>
+              Ditunda
+            </span>
+          ) : isCancelled ? (
+            <span style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#ef4444" }}>
+              Dibatalkan
+            </span>
+          ) : null}
         </div>
 
         {/* Team B */}
@@ -100,7 +129,7 @@ export function MatchScoreboard({
         </div>
       </div>
 
-      {/* Rule 1: Penalty Shootout Banner for PRT013 (display penaltyResult properties only) */}
+      {/* Penalty Shootout Banner for PRT013 */}
       {match.penaltyResult && (
         <div className={styles.penaltyBanner}>
           <span>⚽ Adu Penalti</span>
