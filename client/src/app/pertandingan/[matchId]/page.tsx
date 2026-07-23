@@ -62,12 +62,15 @@ export default async function MatchDetailRoute({ params }: PageProps) {
     notFound();
   }
 
-  // Point 9: Complete JSON-LD with url, schema status mapping, and safe serialization
-  const jsonLd = {
+  // Requirement 3: Optional base URL from environment variable only.
+  // Do NOT fallback to assumed domain, localhost, or example domain.
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+  const canonicalUrl = baseUrl ? `${baseUrl}/pertandingan/${data.match.id}` : undefined;
+
+  const jsonLd: Record<string, unknown> = {
     "@context": "https://schema.org",
     "@type": "SportsEvent",
     name: `${data.teamA.name} vs ${data.teamB.name}`,
-    url: `https://fcs.sumedang.go.id/pertandingan/${data.match.id}`,
     startDate: `${data.match.date}T${data.match.startTime}:00+07:00`,
     eventStatus: getEventStatusSchema(data.match.status),
     location: data.venue
@@ -91,6 +94,10 @@ export default async function MatchDetailRoute({ params }: PageProps) {
       name: data.competition.name,
     },
   };
+
+  if (canonicalUrl) {
+    jsonLd.url = canonicalUrl;
+  }
 
   // Safe JSON serialization against script injection
   const safeJsonLdString = JSON.stringify(jsonLd).replace(/</g, "\\u003c");

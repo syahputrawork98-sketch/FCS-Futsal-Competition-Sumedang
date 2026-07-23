@@ -33,16 +33,77 @@ export function validateMatchPrototypeData(): void {
 
   const matchMap = new Map(matchesPrototypeData.matches.map((m) => [m.id, m]));
   const teamMap = new Map(matchesPrototypeData.teams.map((t) => [t.id, t]));
+  const phaseMap = new Map(matchesPrototypeData.phases.map((p) => [p.id, p]));
+  const groupMap = new Map(matchesPrototypeData.groups.map((g) => [g.id, g]));
+  const venueMap = new Map(matchesPrototypeData.venues.map((v) => [v.id, v]));
   const playerMap = new Map(matchPlayersPrototypeData.map((p) => [p.id, p]));
   const officialMap = new Map(matchOfficialsPrototypeData.map((o) => [o.id, o]));
 
-  // 4. Match numbers uniqueness
+  // 4. Validate every MatchRecord references (Requirement 2)
   const numbersSeen = new Set<number>();
+
   for (const m of matchesPrototypeData.matches) {
+    // Unique match numbers
     if (numbersSeen.has(m.number)) {
       throw new Error(`[Data Integrity Error] Duplicate match number: ${m.number}.`);
     }
     numbersSeen.add(m.number);
+
+    // teamAId validity
+    if (!teamMap.has(m.teamAId)) {
+      throw new Error(
+        `[Data Integrity Error] Match ${m.id} references invalid teamAId: '${m.teamAId}'.`
+      );
+    }
+
+    // teamBId validity
+    if (!teamMap.has(m.teamBId)) {
+      throw new Error(
+        `[Data Integrity Error] Match ${m.id} references invalid teamBId: '${m.teamBId}'.`
+      );
+    }
+
+    // teamAId != teamBId
+    if (m.teamAId === m.teamBId) {
+      throw new Error(
+        `[Data Integrity Error] Match ${m.id} teamAId and teamBId cannot be identical ('${m.teamAId}').`
+      );
+    }
+
+    // phaseId validity
+    if (!phaseMap.has(m.phaseId)) {
+      throw new Error(
+        `[Data Integrity Error] Match ${m.id} references invalid phaseId: '${m.phaseId}'.`
+      );
+    }
+
+    // groupId validity and phase matching
+    if (m.groupId !== null) {
+      if (!groupMap.has(m.groupId)) {
+        throw new Error(
+          `[Data Integrity Error] Match ${m.id} references invalid groupId: '${m.groupId}'.`
+        );
+      }
+      // Group phase (FAS01) must have groupId; knockout phases (FAS02, FAS03, FAS04) should not have group
+      if (m.phaseId !== "FAS01") {
+        throw new Error(
+          `[Data Integrity Error] Match ${m.id} in phase '${m.phaseId}' should not have groupId '${m.groupId}'.`
+        );
+      }
+    } else {
+      if (m.phaseId === "FAS01") {
+        throw new Error(
+          `[Data Integrity Error] Group stage match ${m.id} in phase 'FAS01' must have a groupId.`
+        );
+      }
+    }
+
+    // venueId validity
+    if (!venueMap.has(m.venueId)) {
+      throw new Error(
+        `[Data Integrity Error] Match ${m.id} references invalid venueId: '${m.venueId}'.`
+      );
+    }
   }
 
   // 5. Each match has exactly 5 assignments

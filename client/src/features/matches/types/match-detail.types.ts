@@ -80,10 +80,12 @@ export type ResolvedMatchTimelineItem = MatchEventRecord & {
   scoreAfterEvent: { teamAScore: number; teamBScore: number } | null;
 };
 
-export type MatchScorerSummary = {
+export type MatchGoalDetail = {
+  eventId: string;
+  minute: number;
   player: MatchPlayerSummary;
+  relatedPlayer: MatchPlayerSummary | null;
   teamId: string;
-  minutes: number[];
 };
 
 export type MatchDetailPageData = {
@@ -96,7 +98,7 @@ export type MatchDetailPageData = {
   teamB: MatchTeam;
   winnerTeamId: string | null;
   timeline: ResolvedMatchTimelineItem[];
-  scorers: MatchScorerSummary[];
+  goals: MatchGoalDetail[];
   teamAOfficials: TeamOfficialSummary[];
   teamBOfficials: TeamOfficialSummary[];
   matchOfficials: Array<

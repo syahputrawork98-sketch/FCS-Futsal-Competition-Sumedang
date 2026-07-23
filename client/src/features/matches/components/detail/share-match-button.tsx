@@ -1,22 +1,49 @@
 "use client";
 
-import React, { useState } from "react";
-import { Share2, Check } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Share2, Check, AlertCircle } from "lucide-react";
 import styles from "./match-primary-actions.module.css";
 
+type CopyState = "idle" | "success" | "error";
+
 export function ShareMatchButton() {
-  const [copied, setCopied] = useState(false);
+  const [copyState, setCopyState] = useState<CopyState>("idle");
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const clearTimer = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      clearTimer();
+    };
+  }, []);
 
   const handleShare = async () => {
+    clearTimer();
+
     try {
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" && navigator.clipboard) {
         await navigator.clipboard.writeText(window.location.href);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2500);
+        setCopyState("success");
+        timeoutRef.current = setTimeout(() => {
+          setCopyState("idle");
+        }, 3000);
+      } else {
+        setCopyState("error");
+        timeoutRef.current = setTimeout(() => {
+          setCopyState("idle");
+        }, 4000);
       }
     } catch {
-      // Fallback if clipboard API fails
-      setCopied(false);
+      setCopyState("error");
+      timeoutRef.current = setTimeout(() => {
+        setCopyState("idle");
+      }, 4000);
     }
   };
 
@@ -28,10 +55,15 @@ export function ShareMatchButton() {
         onClick={handleShare}
         aria-label="Salin tautan pertandingan ini"
       >
-        {copied ? (
+        {copyState === "success" ? (
           <>
             <Check size={16} aria-hidden="true" color="#34d399" />
-            <span>Tautan Disalin!</span>
+            <span>Tautan disalin</span>
+          </>
+        ) : copyState === "error" ? (
+          <>
+            <AlertCircle size={16} aria-hidden="true" color="#f87171" />
+            <span>Gagal menyalin</span>
           </>
         ) : (
           <>
@@ -42,7 +74,11 @@ export function ShareMatchButton() {
       </button>
 
       <span className="sr-only" aria-live="polite">
-        {copied ? "Tautan pertandingan telah berhasil disalin ke clipboard." : ""}
+        {copyState === "success"
+          ? "Tautan pertandingan telah berhasil disalin."
+          : copyState === "error"
+          ? "Tautan gagal disalin. Silakan salin alamat dari browser."
+          : ""}
       </span>
     </div>
   );

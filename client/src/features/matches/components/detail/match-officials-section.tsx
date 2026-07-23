@@ -18,12 +18,11 @@ export function MatchOfficialsSection({
 }: MatchOfficialsSectionProps) {
   if (officials.length === 0) {
     return (
-      <div id="perangkat">
-        <MatchSectionUnavailable
-          title="Perangkat Pertandingan Belum Ditugaskan"
-          description="Data penugasan wasit dan perangkat pertandingan belum dicatat untuk laga ini."
-        />
-      </div>
+      <MatchSectionUnavailable
+        id="perangkat"
+        title="Perangkat Pertandingan Belum Ditugaskan"
+        description="Data penugasan wasit dan perangkat pertandingan belum dicatat untuk laga ini."
+      />
     );
   }
 

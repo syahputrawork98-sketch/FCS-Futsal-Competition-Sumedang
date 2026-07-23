@@ -1,28 +1,22 @@
 import type {
+  MatchGoalDetail,
   MatchPlayerSummary,
-  MatchScorerSummary,
   ResolvedMatchTimelineItem,
 } from "../types/match-detail.types";
 
-export function deriveMatchScorers(
+export function deriveMatchGoals(
   timeline: ResolvedMatchTimelineItem[]
-): MatchScorerSummary[] {
-  const goalEvents = timeline.filter((item) => item.type === "goal" && item.player);
-
-  const scorerMap = new Map<string, { player: MatchPlayerSummary; teamId: string; minutes: number[] }>();
-
-  for (const evt of goalEvents) {
-    if (!evt.player) continue;
-    const key = `${evt.teamId}_${evt.player.id}`;
-    if (!scorerMap.has(key)) {
-      scorerMap.set(key, {
-        player: evt.player,
-        teamId: evt.teamId,
-        minutes: [],
-      });
-    }
-    scorerMap.get(key)!.minutes.push(evt.minute);
-  }
-
-  return Array.from(scorerMap.values());
+): MatchGoalDetail[] {
+  return timeline
+    .filter(
+      (item): item is ResolvedMatchTimelineItem & { player: MatchPlayerSummary } =>
+        (item.type === "goal" || item.type === "own_goal") && item.player !== null
+    )
+    .map((item) => ({
+      eventId: item.id,
+      minute: item.minute,
+      player: item.player,
+      relatedPlayer: item.relatedPlayer,
+      teamId: item.teamId,
+    }));
 }

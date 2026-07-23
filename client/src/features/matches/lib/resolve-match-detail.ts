@@ -10,7 +10,7 @@ import {
   matchOfficialsPrototypeData,
 } from "../data/match-officials-prototype-data";
 import { deriveMatchTimeline } from "./derive-match-timeline";
-import { deriveMatchScorers } from "./derive-match-summary";
+import { deriveMatchGoals } from "./derive-match-summary";
 import { validateMatchPrototypeData } from "./validate-match-prototype-data";
 
 // Run data integrity validation on module load / resolver invocation
@@ -66,7 +66,7 @@ export function resolveMatchDetail(matchId: string): MatchDetailPageData | null 
   // Events & Timeline
   const matchEvents = matchEventsPrototypeData.filter((e) => e.matchId === match.id);
   const timeline = deriveMatchTimeline(matchEvents, teamA, teamB);
-  const scorers = deriveMatchScorers(timeline);
+  const goals = deriveMatchGoals(timeline);
 
   // Team Officials
   const teamAOfficials = matchTeamOfficialsPrototypeData.filter(
@@ -124,7 +124,7 @@ export function resolveMatchDetail(matchId: string): MatchDetailPageData | null 
     teamB,
     winnerTeamId,
     timeline,
-    scorers,
+    goals,
     teamAOfficials,
     teamBOfficials,
     matchOfficials,

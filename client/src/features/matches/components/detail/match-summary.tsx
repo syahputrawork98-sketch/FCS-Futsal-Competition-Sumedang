@@ -1,6 +1,6 @@
 import React from "react";
 import { FileText } from "lucide-react";
-import type { MatchScorerSummary } from "../../types/match-detail.types";
+import type { MatchGoalDetail } from "../../types/match-detail.types";
 import type { MatchRecord, MatchTeam } from "../../types/matches.types";
 import styles from "./match-summary.module.css";
 
@@ -8,7 +8,7 @@ type MatchSummaryProps = {
   match: MatchRecord;
   teamA: MatchTeam;
   teamB: MatchTeam;
-  scorers: MatchScorerSummary[];
+  goals: MatchGoalDetail[];
   winnerTeamId: string | null;
 };
 
@@ -16,11 +16,11 @@ export function MatchSummary({
   match,
   teamA,
   teamB,
-  scorers,
+  goals,
   winnerTeamId,
 }: MatchSummaryProps) {
-  const teamAScorers = scorers.filter((s) => s.teamId === teamA.id);
-  const teamBScorers = scorers.filter((s) => s.teamId === teamB.id);
+  const teamAGoals = goals.filter((g) => g.teamId === teamA.id);
+  const teamBGoals = goals.filter((g) => g.teamId === teamB.id);
 
   const winnerTeam = winnerTeamId
     ? winnerTeamId === teamA.id
@@ -49,19 +49,21 @@ export function MatchSummary({
         )}
       </div>
 
-      {/* Scorers Grid */}
+      {/* Scorers Grid with Assists */}
       <div className={styles.grid}>
-        {/* Team A Scorers */}
+        {/* Team A Goals */}
         <div className={styles.teamScorers}>
           <span className={styles.teamHeader}>{teamA.name}</span>
-          {teamAScorers.length > 0 ? (
+          {teamAGoals.length > 0 ? (
             <ul className={styles.scorersList}>
-              {teamAScorers.map((item) => (
-                <li key={item.player.id} className={styles.scorerItem}>
-                  <span>⚽ {item.player.displayName}</span>
-                  <span className={styles.minutes}>
-                    ({item.minutes.map((m) => `${m}'`).join(", ")})
-                  </span>
+              {teamAGoals.map((g) => (
+                <li key={g.eventId} className={styles.scorerItem}>
+                  <span>⚽ {g.player.displayName} ({g.minute}&apos;)</span>
+                  {g.relatedPlayer && (
+                    <span className={styles.minutes}>
+                      — Assist: {g.relatedPlayer.displayName}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -70,17 +72,19 @@ export function MatchSummary({
           )}
         </div>
 
-        {/* Team B Scorers */}
+        {/* Team B Goals */}
         <div className={styles.teamScorers}>
           <span className={styles.teamHeader}>{teamB.name}</span>
-          {teamBScorers.length > 0 ? (
+          {teamBGoals.length > 0 ? (
             <ul className={styles.scorersList}>
-              {teamBScorers.map((item) => (
-                <li key={item.player.id} className={styles.scorerItem}>
-                  <span>⚽ {item.player.displayName}</span>
-                  <span className={styles.minutes}>
-                    ({item.minutes.map((m) => `${m}'`).join(", ")})
-                  </span>
+              {teamBGoals.map((g) => (
+                <li key={g.eventId} className={styles.scorerItem}>
+                  <span>⚽ {g.player.displayName} ({g.minute}&apos;)</span>
+                  {g.relatedPlayer && (
+                    <span className={styles.minutes}>
+                      — Assist: {g.relatedPlayer.displayName}
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -90,7 +94,7 @@ export function MatchSummary({
         </div>
       </div>
 
-      {/* Penalty note if present (Rule 1 & Point 6) */}
+      {/* Penalty note if present (Rule 1 & Requirement 1) */}
       {match.penaltyResult && (
         <div className={styles.noteBox}>
           <strong>Hasil Adu Penalti:</strong> {winnerTeam?.name} menang adu penalti {match.penaltyResult.teamAScore}–{match.penaltyResult.teamBScore}

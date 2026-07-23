@@ -49,19 +49,20 @@ export function MatchDetailPage({ data }: MatchDetailPageProps) {
         venue={data.venue}
       />
 
+      {/* Requirement 5 section order: PrimaryActions -> Summary -> ContentNav -> Timeline */}
       <MatchPrimaryActions />
+
+      <MatchSummary
+        match={data.match}
+        teamA={data.teamA}
+        teamB={data.teamB}
+        goals={data.goals}
+        winnerTeamId={data.winnerTeamId}
+      />
 
       <MatchContentNavigation hasVenue={Boolean(data.venue)} />
 
       <div className={styles.contentBody}>
-        <MatchSummary
-          match={data.match}
-          teamA={data.teamA}
-          teamB={data.teamB}
-          scorers={data.scorers}
-          winnerTeamId={data.winnerTeamId}
-        />
-
         <MatchTimeline timeline={data.timeline} />
 
         <MatchStatisticsSection statistics={data.statistics} />
