@@ -35,11 +35,14 @@ export function MobileNavigation() {
     };
   }, [isOpen]);
 
-  const [prevPathname, setPrevPathname] = useState(pathname);
-  if (pathname !== prevPathname) {
-    setPrevPathname(pathname);
-    setIsOpen(false);
-  }
+  // Close menu when pathname changes
+  const prevPathnameRef = useRef(pathname);
+  useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname;
+      setIsOpen(false);
+    }
+  }, [pathname]);
 
   const isActive = (href?: string, matchPaths?: string[]) => {
     if (!pathname) return false;
