@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useSearchParams } from "next/navigation";
 import type { StandingsPageData } from "./types/standings.types";
 import { parseGroupQuery } from "./lib/standings-search-params";
@@ -25,17 +25,6 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
   const searchParams = useSearchParams();
   const activeGroupId = parseGroupQuery(searchParams.get("grup") ?? undefined);
 
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
   if (data.status === "unavailable" || data.groups.length === 0) {
     return (
       <div className={styles.container}>
@@ -46,11 +35,8 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
     );
   }
 
-  // Requirement 6: On mobile without query, GRPA active and only Group A is visible
-  const effectiveActiveGroup = isMobile && activeGroupId === null ? "GRPA" : activeGroupId;
-
-  const visibleGroups = effectiveActiveGroup
-    ? data.groups.filter((g) => g.group.id === effectiveActiveGroup)
+  const visibleGroups = activeGroupId
+    ? data.groups.filter((g) => g.group.id === activeGroupId)
     : data.groups;
 
   const statusLabel =
@@ -79,7 +65,7 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
 
       {data.status === "partial" && <StandingsPartialState />}
 
-      <GroupNavigation activeGroupId={effectiveActiveGroup} />
+      <GroupNavigation activeGroupId={activeGroupId} />
 
       {visibleGroups.map((groupStandings) => (
         <GroupStandingsSection
@@ -87,6 +73,7 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
           groupStandings={groupStandings}
           panelId={`panel-${groupStandings.group.id}`}
           tabId={`tab-${groupStandings.group.id}`}
+          isDefaultHideOnMobile={activeGroupId === null && groupStandings.group.id === "GRPB"}
         />
       ))}
 

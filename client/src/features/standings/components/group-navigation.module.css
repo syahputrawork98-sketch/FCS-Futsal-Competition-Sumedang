@@ -13,6 +13,26 @@
   width: fit-content;
 }
 
+.desktopFilterAll {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted, #94a3b8);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.desktopFilterAll:hover {
+  color: var(--color-text-main, #ffffff);
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .tabItem {
   display: inline-flex;
   align-items: center;
@@ -44,12 +64,8 @@
   color: #0f172a;
 }
 
-.desktopOnly {
-  display: inline-flex;
-}
-
 @media (max-width: 767px) {
-  .desktopOnly {
+  .desktopFilterAll {
     display: none !important;
   }
 }

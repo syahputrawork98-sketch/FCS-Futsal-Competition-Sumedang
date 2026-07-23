@@ -19,12 +19,28 @@ export function StandingsSummary({
   let badgeText = "Klasemen Final";
   let badgeStyle = styles.badgeFinal;
 
-  if (status === "provisional") {
-    badgeText = "Klasemen Sementara";
-    badgeStyle = styles.badgeProvisional;
-  } else if (status === "not_started") {
-    badgeText = "Belum Dimulai";
-    badgeStyle = styles.badgeNotStarted;
+  switch (status) {
+    case "provisional":
+      badgeText = "Klasemen Sementara";
+      badgeStyle = styles.badgeProvisional;
+      break;
+    case "partial":
+      badgeText = "Klasemen Partial";
+      badgeStyle = styles.badgePartial;
+      break;
+    case "not_started":
+      badgeText = "Belum Dimulai";
+      badgeStyle = styles.badgeNotStarted;
+      break;
+    case "unavailable":
+      badgeText = "Belum Tersedia";
+      badgeStyle = styles.badgeUnavailable;
+      break;
+    case "final":
+    default:
+      badgeText = "Klasemen Final";
+      badgeStyle = styles.badgeFinal;
+      break;
   }
 
   return (

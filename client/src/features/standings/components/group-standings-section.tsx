@@ -9,9 +9,15 @@ type GroupStandingsSectionProps = {
   groupStandings: GroupStandings;
   panelId?: string;
   tabId?: string;
+  isDefaultHideOnMobile?: boolean;
 };
 
-export function GroupStandingsSection({ groupStandings, panelId, tabId }: GroupStandingsSectionProps) {
+export function GroupStandingsSection({
+  groupStandings,
+  panelId,
+  tabId,
+  isDefaultHideOnMobile,
+}: GroupStandingsSectionProps) {
   const { group, rows, completedOfficialMatches, totalMatches, status } = groupStandings;
 
   const statusBadgeLabel =
@@ -23,12 +29,14 @@ export function GroupStandingsSection({ groupStandings, panelId, tabId }: GroupS
       ? "Partial"
       : "Belum Dimulai";
 
+  const containerClass = `${styles.section} ${isDefaultHideOnMobile ? styles.mobileHideWhenDefault : ""}`;
+
   return (
     <section
       id={panelId}
       role="tabpanel"
       aria-labelledby={tabId}
-      className={styles.section}
+      className={containerClass}
       aria-label={`Klasemen ${group.name}`}
     >
       <div className={styles.header}>
@@ -47,7 +55,7 @@ export function GroupStandingsSection({ groupStandings, panelId, tabId }: GroupS
         </Link>
       </div>
 
-      <StandingsTable groupName={group.name} rows={rows} />
+      <StandingsTable groupName={group.name} rows={rows} status={status} />
     </section>
   );
 }

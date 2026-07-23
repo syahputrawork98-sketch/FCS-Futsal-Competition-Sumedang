@@ -72,6 +72,7 @@ export function deriveGroupStandings(
     } else if (scoreB > scoreA) {
       rowB.won += 1;
       rowB.points += config.points.win;
+      rowA.lost += 1;
       rowA.points += config.points.loss;
     } else {
       rowA.drawn += 1;

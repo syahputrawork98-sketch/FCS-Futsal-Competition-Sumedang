@@ -17,9 +17,16 @@ export function getHomeStandingsPreviewData(): HomeSectionState<{
       };
     }
 
+    if (pageData.status === "not_started") {
+      return {
+        status: "empty",
+        message: "Pertandingan fase grup belum dimulai.",
+      };
+    }
+
     const mapRows = (rows: typeof groupAData.rows): HomeStanding[] =>
       rows.map((row) => ({
-        position: row.position ?? 0,
+        position: row.position,
         team: {
           id: row.team.id,
           name: row.team.name,
@@ -34,7 +41,9 @@ export function getHomeStandingsPreviewData(): HomeSectionState<{
             ? "Lolos"
             : row.qualificationStatus === "eliminated"
             ? "Gugur"
-            : undefined,
+            : row.rankingResolution === "unresolved_tie"
+            ? "Menunggu Keputusan"
+            : "Pending",
       }));
 
     return {

@@ -2,16 +2,17 @@
 
 import React, { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import type { StandingsTeamRow } from "../types/standings.types";
+import type { StandingsStatus, StandingsTeamRow } from "../types/standings.types";
 import { MobileStandingsRowDetails } from "./mobile-standings-row-details";
 import styles from "./standings-table.module.css";
 
 type StandingsTableProps = {
   groupName: string;
   rows: StandingsTeamRow[];
+  status?: StandingsStatus;
 };
 
-export function StandingsTable({ groupName, rows }: StandingsTableProps) {
+export function StandingsTable({ groupName, rows, status }: StandingsTableProps) {
   const [expandedTeamIds, setExpandedTeamIds] = useState<Set<string>>(new Set());
 
   const toggleRow = (teamId: string) => {
@@ -26,16 +27,24 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
     });
   };
 
+  const isNotStarted = status === "not_started";
+
+  const formatValue = (val: number) => {
+    if (isNotStarted) return "—";
+    return `${val}`;
+  };
+
   const formatGd = (gd: number) => {
+    if (isNotStarted) return "—";
     if (gd > 0) return `+${gd}`;
     return `${gd}`;
   };
 
-  const renderStatusBadge = (status: StandingsTeamRow["qualificationStatus"]) => {
-    if (status === "qualified") {
+  const renderStatusBadge = (rowStatus: StandingsTeamRow["qualificationStatus"]) => {
+    if (rowStatus === "qualified") {
       return <span className={styles.badgeQualified}>Lolos</span>;
     }
-    if (status === "eliminated") {
+    if (rowStatus === "eliminated") {
       return <span className={styles.badgeEliminated}>Gugur</span>;
     }
     return <span className={styles.badgePending}>Menunggu keputusan</span>;
@@ -88,8 +97,12 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
         <tbody>
           {rows.map((row) => {
             const isExpanded = expandedTeamIds.has(row.team.id);
-            const isQualified = row.qualificationStatus === "qualified";
-            const rowClass = isQualified ? styles.trQualified : styles.trEliminated;
+            const rowClass =
+              row.qualificationStatus === "qualified"
+                ? styles.trQualified
+                : row.qualificationStatus === "eliminated"
+                ? styles.trEliminated
+                : styles.trPending;
             const detailId = `mobile-detail-${row.team.id}`;
 
             return (
@@ -106,26 +119,26 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
                       <span className={styles.teamName}>{row.team.name}</span>
                     </div>
                   </th>
-                  <td className={`${styles.td} ${styles.numCol}`}>{row.played}</td>
+                  <td className={`${styles.td} ${styles.numCol}`}>{formatValue(row.played)}</td>
                   <td className={`${styles.td} ${styles.numCol} ${styles.desktopOnly}`}>
-                    {row.won}
+                    {formatValue(row.won)}
                   </td>
                   <td className={`${styles.td} ${styles.numCol} ${styles.desktopOnly}`}>
-                    {row.drawn}
+                    {formatValue(row.drawn)}
                   </td>
                   <td className={`${styles.td} ${styles.numCol} ${styles.desktopOnly}`}>
-                    {row.lost}
+                    {formatValue(row.lost)}
                   </td>
                   <td className={`${styles.td} ${styles.numCol} ${styles.desktopOnly}`}>
-                    {row.goalsFor}
+                    {formatValue(row.goalsFor)}
                   </td>
                   <td className={`${styles.td} ${styles.numCol} ${styles.desktopOnly}`}>
-                    {row.goalsAgainst}
+                    {formatValue(row.goalsAgainst)}
                   </td>
                   <td className={`${styles.td} ${styles.numCol}`}>
                     {formatGd(row.goalDifference)}
                   </td>
-                  <td className={`${styles.td} ${styles.pointsCol}`}>{row.points}</td>
+                  <td className={`${styles.td} ${styles.pointsCol}`}>{formatValue(row.points)}</td>
                   <td className={`${styles.td} ${styles.statusCol}`}>
                     {renderStatusBadge(row.qualificationStatus)}
                   </td>

@@ -57,6 +57,14 @@
   background: rgba(255, 255, 255, 0.03);
 }
 
+.trPending {
+  background: rgba(245, 158, 11, 0.04);
+}
+
+.trPending:hover {
+  background: rgba(245, 158, 11, 0.08);
+}
+
 .posCol {
   width: 36px;
   text-align: center;
@@ -64,7 +72,6 @@
 }
 
 .teamCol {
-  /* No min-width forcing overflow on mobile */
   width: auto;
 }
 
