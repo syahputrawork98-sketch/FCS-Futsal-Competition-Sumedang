@@ -14,11 +14,14 @@ export function resolveStandingsPageData(): StandingsPageData {
   const competition = matchesPrototypeData.competition;
   const warnings: StandingsDataWarning[] = [];
 
-  // Run initial data validations (Requirement 5 & 1)
+  let hasValidationError = false;
+
+  // Item 2: Run initial dataset integrity validations and store flag
   try {
     const validationWarnings = validateStandingsPrototypeData();
     warnings.push(...validationWarnings);
   } catch (err) {
+    hasValidationError = true;
     warnings.push({
       code: "VALIDATION_ERROR",
       message: err instanceof Error ? err.message : "Kesalahan integritas data.",
@@ -33,12 +36,45 @@ export function resolveStandingsPageData(): StandingsPageData {
   let totalGroupMatches = 0;
   let completedOfficialGroupMatches = 0;
 
-  // Requirement 1: Process each group in its own try/catch block for error isolation
+  // Item 3: Process each group in its own try/catch block with local input validation
   for (const group of groups) {
     try {
-      // Requirement 5: Do NOT sort teams alphabetically. Retain original team dataset order.
       const groupTeams = matchesPrototypeData.teams.filter((t) => t.groupId === group.id);
+      const groupMatches = matchesPrototypeData.matches.filter(
+        (m) => m.phaseId === config.groupPhaseId && m.groupId === group.id
+      );
 
+      // Local assertion 1: Group must have exactly 4 teams
+      if (groupTeams.length !== 4) {
+        throw new Error(`Grup '${group.name}' (${group.id}) tidak memiliki tepat 4 tim (ditemukan: ${groupTeams.length}).`);
+      }
+
+      // Local assertion 2: Group must have exactly 6 matches
+      if (groupMatches.length !== 6) {
+        throw new Error(`Grup '${group.name}' (${group.id}) tidak memiliki tepat 6 pertandingan (ditemukan: ${groupMatches.length}).`);
+      }
+
+      const teamMap = new Map(groupTeams.map((t) => [t.id, t]));
+
+      // Local assertion 3: Every match must refer to valid teams within group
+      for (const m of groupMatches) {
+        const teamA = teamMap.get(m.teamAId);
+        const teamB = teamMap.get(m.teamBId);
+
+        if (!teamA || !teamB) {
+          throw new Error(`Pertandingan '${m.id}' di ${group.name} merujuk tim di luar grup (${m.teamAId} vs ${m.teamBId}).`);
+        }
+
+        if (m.teamAId === m.teamBId) {
+          throw new Error(`Pertandingan '${m.id}' di ${group.name} memiliki tim A sama dengan tim B (${m.teamAId}).`);
+        }
+
+        if (teamA.groupId !== group.id || teamB.groupId !== group.id) {
+          throw new Error(`Tim dalam pertandingan '${m.id}' memiliki groupId tidak cocok dengan ${group.id}.`);
+        }
+      }
+
+      // Derivation
       const groupResult = deriveGroupStandings(
         group,
         groupTeams,
@@ -102,7 +138,7 @@ export function resolveStandingsPageData(): StandingsPageData {
       totalGroupMatches += groupResult.totalMatches;
       completedOfficialGroupMatches += groupResult.completedOfficialMatches;
     } catch (err) {
-      // Group isolation: catch group processing failure without failing the entire page
+      // Group isolation: catch error and record warning
       warnings.push({
         code: "GROUP_PROCESSING_ERROR",
         message: `Gagal memproses data klasemen ${group.name}: ${err instanceof Error ? err.message : String(err)}`,
@@ -111,7 +147,7 @@ export function resolveStandingsPageData(): StandingsPageData {
     }
   }
 
-  // Requirement 2: Real unavailable status when zero groups could be derived
+  // Item 4: Real unavailable status when zero groups could be derived
   if (derivedGroups.length === 0) {
     return {
       competition,
@@ -125,7 +161,7 @@ export function resolveStandingsPageData(): StandingsPageData {
     };
   }
 
-  // Requirement 1 & 4: Determine page status
+  // Item 2: Determine page status with hasValidationError check
   const hasPartialWarning = warnings.some(
     (w) => w.code.includes("MISMATCH") || w.code.includes("NULL_SCORE") || w.code === "GROUP_PROCESSING_ERROR"
   );
@@ -136,7 +172,7 @@ export function resolveStandingsPageData(): StandingsPageData {
 
   let pageStatus: StandingsStatus = "final";
 
-  if (groupProcessingFailed || hasPartialWarning) {
+  if (hasValidationError || groupProcessingFailed || hasPartialWarning) {
     pageStatus = "partial";
   } else if (allNotStarted) {
     pageStatus = "not_started";

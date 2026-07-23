@@ -64,7 +64,8 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
       <GroupNavigation activeGroupId={activeGroupId} />
 
       {data.groups.map((groupStandings) => {
-        const isHidden = activeGroupId !== null && activeGroupId !== groupStandings.group.id;
+        const isExplicitHide = activeGroupId !== null && activeGroupId !== groupStandings.group.id;
+        const isDefaultMobileHide = activeGroupId === null && groupStandings.group.id === "GRPB";
 
         return (
           <GroupStandingsSection
@@ -72,7 +73,8 @@ export function ClientStandingsContainer({ data }: ClientStandingsContainerProps
             groupStandings={groupStandings}
             panelId={`panel-${groupStandings.group.id}`}
             tabId={`tab-mobile-${groupStandings.group.id}`}
-            hidden={isHidden}
+            hidden={isExplicitHide}
+            isDefaultHideOnMobile={isDefaultMobileHide}
           />
         );
       })}
