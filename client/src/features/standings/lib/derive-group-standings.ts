@@ -1,9 +1,9 @@
 import type {
   GroupStandings,
-  QualificationStatus,
   StandingsConfig,
   StandingsStatus,
   StandingsTeamRow,
+  StandingsTieBreakKey,
 } from "../types/standings.types";
 import type { MatchGroup, MatchRecord, MatchTeam } from "@/features/matches/types/matches.types";
 
@@ -13,7 +13,6 @@ export function deriveGroupStandings(
   allMatches: MatchRecord[],
   config: StandingsConfig
 ): GroupStandings {
-  // Filter matches belonging to this group and group stage phase
   const groupMatches = allMatches.filter(
     (m) => m.phaseId === config.groupPhaseId && m.groupId === group.id
   );
@@ -26,7 +25,7 @@ export function deriveGroupStandings(
       m.teamBScore !== null
   );
 
-  // Initialize row data for each team in group
+  // Initialize team rows
   const rowMap = new Map<string, StandingsTeamRow>();
   for (const team of groupTeams) {
     rowMap.set(team.id, {
@@ -46,7 +45,7 @@ export function deriveGroupStandings(
     });
   }
 
-  // Accumulate scores from completed official matches
+  // Accumulate scores
   for (const match of completedOfficialMatches) {
     const rowA = rowMap.get(match.teamAId);
     const rowB = rowMap.get(match.teamBId);
@@ -73,7 +72,6 @@ export function deriveGroupStandings(
     } else if (scoreB > scoreA) {
       rowB.won += 1;
       rowB.points += config.points.win;
-      rowA.lost += 1;
       rowA.points += config.points.loss;
     } else {
       rowA.drawn += 1;
@@ -83,40 +81,39 @@ export function deriveGroupStandings(
     }
   }
 
-  // Compute goalDifference
   for (const row of rowMap.values()) {
     row.goalDifference = row.goalsFor - row.goalsAgainst;
   }
 
   const rows = Array.from(rowMap.values());
 
-  // Sort rows based on points DESC, goalDifference DESC, goalsFor DESC
+  // Dynamic comparator driven by config.tieBreakOrder (Requirement 3)
+  const getMetricValue = (row: StandingsTeamRow, key: StandingsTieBreakKey): number => {
+    switch (key) {
+      case "goalDifference":
+        return row.goalDifference;
+      case "goalsFor":
+        return row.goalsFor;
+      default:
+        return 0;
+    }
+  };
+
   rows.sort((a, b) => {
-    if (a.points !== b.points) return b.points - a.points;
-    if (a.goalDifference !== b.goalDifference)
-      return b.goalDifference - a.goalDifference;
-    if (a.goalsFor !== b.goalsFor) return b.goalsFor - a.goalsFor;
-    return 0; // Stable render order preserved for unresolved ties
+    if (a.points !== b.points) {
+      return b.points - a.points;
+    }
+    for (const key of config.tieBreakOrder) {
+      const valA = getMetricValue(a, key);
+      const valB = getMetricValue(b, key);
+      if (valA !== valB) {
+        return valB - valA;
+      }
+    }
+    return 0; // Deterministic order maintained by dataset initial order
   });
 
-  // Detect unresolved ties
-  let hasUnresolvedTie = false;
-  for (let i = 0; i < rows.length - 1; i++) {
-    const current = rows[i];
-    const next = rows[i + 1];
-
-    if (
-      current.points === next.points &&
-      current.goalDifference === next.goalDifference &&
-      current.goalsFor === next.goalsFor
-    ) {
-      current.rankingResolution = "unresolved_tie";
-      next.rankingResolution = "unresolved_tie";
-      hasUnresolvedTie = true;
-    }
-  }
-
-  // Determine group status
+  // Determine group status (Requirement 4)
   let status: StandingsStatus = "final";
   if (completedOfficialMatches.length === 0) {
     status = "not_started";
@@ -124,36 +121,89 @@ export function deriveGroupStandings(
     status = "provisional";
   }
 
-  // Determine positions and qualification status
-  rows.forEach((row, index) => {
-    const pos = index + 1;
+  // Partition sorted rows into Equivalence Classes (Requirement 2)
+  const isEquivalent = (a: StandingsTeamRow, b: StandingsTeamRow): boolean => {
+    if (a.points !== b.points) return false;
+    for (const key of config.tieBreakOrder) {
+      if (getMetricValue(a, key) !== getMetricValue(b, key)) {
+        return false;
+      }
+    }
+    return true;
+  };
 
-    if (row.rankingResolution === "unresolved_tie") {
-      // Check if tie crosses boundary (e.g. pos 2 vs 3)
-      const isTieCrossingBoundary = index === config.qualifiedTeamsPerGroup - 1 || index === config.qualifiedTeamsPerGroup;
-      if (isTieCrossingBoundary) {
-        row.position = null;
-        row.qualificationStatus = "pending";
-      } else {
-        row.position = pos;
-        row.qualificationStatus =
-          status === "final"
-            ? pos <= config.qualifiedTeamsPerGroup
-              ? "qualified"
-              : "eliminated"
-            : "pending";
-      }
+  const equivalenceClasses: Array<{ startIndex: number; endIndex: number; rows: StandingsTeamRow[] }> = [];
+  let currentClass: StandingsTeamRow[] = [];
+  let currentStart = 0;
+
+  rows.forEach((row, idx) => {
+    if (currentClass.length === 0) {
+      currentClass.push(row);
+      currentStart = idx;
     } else {
-      row.position = pos;
-      let qualStatus: QualificationStatus = "pending";
-      if (status === "final") {
-        qualStatus = pos <= config.qualifiedTeamsPerGroup ? "qualified" : "eliminated";
-      } else if (status === "provisional") {
-        qualStatus = "pending";
+      if (isEquivalent(currentClass[0], row)) {
+        currentClass.push(row);
       } else {
-        qualStatus = "pending";
+        equivalenceClasses.push({
+          startIndex: currentStart,
+          endIndex: idx - 1,
+          rows: currentClass,
+        });
+        currentClass = [row];
+        currentStart = idx;
       }
-      row.qualificationStatus = qualStatus;
+    }
+  });
+
+  if (currentClass.length > 0) {
+    equivalenceClasses.push({
+      startIndex: currentStart,
+      endIndex: rows.length - 1,
+      rows: currentClass,
+    });
+  }
+
+  let hasUnresolvedTie = false;
+
+  equivalenceClasses.forEach((eqClass) => {
+    const isUnresolved = eqClass.rows.length > 1;
+
+    if (isUnresolved) {
+      hasUnresolvedTie = true;
+      const straddlesBoundary =
+        eqClass.startIndex < config.qualifiedTeamsPerGroup &&
+        eqClass.endIndex >= config.qualifiedTeamsPerGroup;
+
+      const entireAboveBoundary = eqClass.endIndex < config.qualifiedTeamsPerGroup;
+      const entireBelowBoundary = eqClass.startIndex >= config.qualifiedTeamsPerGroup;
+
+      eqClass.rows.forEach((row) => {
+        row.position = null;
+        row.rankingResolution = "unresolved_tie";
+
+        if (status === "not_started") {
+          row.qualificationStatus = "pending";
+        } else if (straddlesBoundary) {
+          row.qualificationStatus = "pending";
+        } else if (entireAboveBoundary) {
+          row.qualificationStatus = status === "final" ? "qualified" : "pending";
+        } else if (entireBelowBoundary) {
+          row.qualificationStatus = status === "final" ? "eliminated" : "pending";
+        } else {
+          row.qualificationStatus = "pending";
+        }
+      });
+    } else {
+      const row = eqClass.rows[0];
+      const pos = eqClass.startIndex + 1;
+      row.position = pos;
+      row.rankingResolution = "resolved";
+
+      if (status === "final") {
+        row.qualificationStatus = pos <= config.qualifiedTeamsPerGroup ? "qualified" : "eliminated";
+      } else {
+        row.qualificationStatus = "pending";
+      }
     }
   });
 

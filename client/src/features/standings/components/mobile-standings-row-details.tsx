@@ -1,5 +1,6 @@
 import React from "react";
 import type { StandingsTeamRow } from "../types/standings.types";
+import styles from "./mobile-standings-row-details.module.css";
 
 type MobileStandingsRowDetailsProps = {
   row: StandingsTeamRow;
@@ -10,50 +11,39 @@ export function MobileStandingsRowDetails({ row, id }: MobileStandingsRowDetails
   const getQualificationBadge = () => {
     switch (row.qualificationStatus) {
       case "qualified":
-        return <span style={{ color: "#34d399", fontWeight: 700 }}>Lolos Ke Semifinal</span>;
+        return <span className={styles.statusQualified}>Lolos Ke Semifinal</span>;
       case "eliminated":
-        return <span style={{ color: "#f87171", fontWeight: 700 }}>Gugur</span>;
+        return <span className={styles.statusEliminated}>Gugur</span>;
       case "pending":
       default:
-        return <span style={{ color: "#fbbf24", fontWeight: 700 }}>Belum Ditentukan</span>;
+        return <span className={styles.statusPending}>Menunggu Keputusan</span>;
     }
   };
 
   return (
-    <div
-      id={id}
-      style={{
-        padding: "0.75rem 1rem",
-        background: "rgba(15, 23, 42, 0.4)",
-        borderTop: "1px border rgba(255, 255, 255, 0.05)",
-        fontSize: "0.8125rem",
-        display: "grid",
-        gridTemplateColumns: "repeat(2, 1fr)",
-        gap: "0.5rem 1rem",
-      }}
-    >
+    <div id={id} className={styles.detailsContainer}>
       <div>
-        <span style={{ color: "#94a3b8" }}>Menang: </span>
-        <strong style={{ color: "#ffffff" }}>{row.won}</strong>
+        <span className={styles.itemLabel}>Menang: </span>
+        <strong className={styles.itemValue}>{row.won}</strong>
       </div>
       <div>
-        <span style={{ color: "#94a3b8" }}>Gol Memasukkan (GM): </span>
-        <strong style={{ color: "#ffffff" }}>{row.goalsFor}</strong>
+        <span className={styles.itemLabel}>Gol Memasukkan (GM): </span>
+        <strong className={styles.itemValue}>{row.goalsFor}</strong>
       </div>
       <div>
-        <span style={{ color: "#94a3b8" }}>Seri: </span>
-        <strong style={{ color: "#ffffff" }}>{row.drawn}</strong>
+        <span className={styles.itemLabel}>Seri: </span>
+        <strong className={styles.itemValue}>{row.drawn}</strong>
       </div>
       <div>
-        <span style={{ color: "#94a3b8" }}>Gol Kebobolan (GK): </span>
-        <strong style={{ color: "#ffffff" }}>{row.goalsAgainst}</strong>
+        <span className={styles.itemLabel}>Gol Kebobolan (GK): </span>
+        <strong className={styles.itemValue}>{row.goalsAgainst}</strong>
       </div>
       <div>
-        <span style={{ color: "#94a3b8" }}>Kalah: </span>
-        <strong style={{ color: "#ffffff" }}>{row.lost}</strong>
+        <span className={styles.itemLabel}>Kalah: </span>
+        <strong className={styles.itemValue}>{row.lost}</strong>
       </div>
       <div>
-        <span style={{ color: "#94a3b8" }}>Status: </span>
+        <span className={styles.itemLabel}>Status: </span>
         {getQualificationBadge()}
       </div>
     </div>

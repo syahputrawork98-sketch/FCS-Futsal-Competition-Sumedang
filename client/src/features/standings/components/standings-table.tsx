@@ -31,6 +31,16 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
     return `${gd}`;
   };
 
+  const renderStatusBadge = (status: StandingsTeamRow["qualificationStatus"]) => {
+    if (status === "qualified") {
+      return <span className={styles.badgeQualified}>Lolos</span>;
+    }
+    if (status === "eliminated") {
+      return <span className={styles.badgeEliminated}>Gugur</span>;
+    }
+    return <span className={styles.badgePending}>Menunggu keputusan</span>;
+  };
+
   return (
     <div className={styles.wrapper}>
       <table className={styles.table}>
@@ -67,10 +77,10 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
             <th scope="col" className={`${styles.th} ${styles.pointsCol}`}>
               Poin
             </th>
-            <th scope="col" className={`${styles.th} ${styles.statusCol} ${styles.desktopOnly}`}>
+            <th scope="col" className={`${styles.th} ${styles.statusCol}`}>
               Status
             </th>
-            <th scope="col" className={`${styles.th} ${styles.mobileOnly}`} style={{ width: "40px" }}>
+            <th scope="col" className={`${styles.th} ${styles.mobileOnly}`} style={{ width: "36px" }}>
               <span className="sr-only">Detail</span>
             </th>
           </tr>
@@ -116,14 +126,8 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
                     {formatGd(row.goalDifference)}
                   </td>
                   <td className={`${styles.td} ${styles.pointsCol}`}>{row.points}</td>
-                  <td className={`${styles.td} ${styles.statusCol} ${styles.desktopOnly}`}>
-                    {row.qualificationStatus === "qualified" ? (
-                      <span className={styles.badgeQualified}>Lolos</span>
-                    ) : row.qualificationStatus === "eliminated" ? (
-                      <span className={styles.badgeEliminated}>Gugur</span>
-                    ) : (
-                      <span className={styles.badgePending}>Pending</span>
-                    )}
+                  <td className={`${styles.td} ${styles.statusCol}`}>
+                    {renderStatusBadge(row.qualificationStatus)}
                   </td>
                   <td className={`${styles.td} ${styles.mobileOnly}`}>
                     <button
@@ -139,9 +143,9 @@ export function StandingsTable({ groupName, rows }: StandingsTableProps) {
                   </td>
                 </tr>
                 {isExpanded && (
-                  <tr className={styles.mobileOnly}>
-                    <td colSpan={6} style={{ padding: 0 }}>
-                      <MobileStandingsRowDetails row={row} id={detailId} />
+                  <tr id={detailId} className={`${styles.mobileOnly} ${styles.mobileDetailRow}`}>
+                    <td colSpan={7} style={{ padding: 0 }}>
+                      <MobileStandingsRowDetails row={row} id={`${detailId}-content`} />
                     </td>
                   </tr>
                 )}

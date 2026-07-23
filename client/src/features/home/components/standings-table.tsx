@@ -8,6 +8,11 @@ type StandingsTableProps = {
 };
 
 export function StandingsTable({ caption, standings }: StandingsTableProps) {
+  const formatGd = (gd: number) => {
+    if (gd > 0) return `+${gd}`;
+    return `${gd}`;
+  };
+
   return (
     <div className={styles.tableContainer}>
       <table className={styles.table}>
@@ -25,7 +30,7 @@ export function StandingsTable({ caption, standings }: StandingsTableProps) {
         <tbody>
           {standings.map((row) => (
             <tr key={row.team.id} className={styles.row}>
-              <td className={styles.posCol}>{row.position}</td>
+              <td className={styles.posCol}>{row.position !== null ? row.position : "—"}</td>
               <td className={styles.teamCol}>
                 <div className={styles.teamInfo}>
                   {row.team.logo.src ? (
@@ -37,11 +42,19 @@ export function StandingsTable({ caption, standings }: StandingsTableProps) {
                 </div>
               </td>
               <td className={styles.numCol}>{row.played}</td>
-              <td className={`${styles.numCol} ${styles.hideMobile}`}>{row.goalDifference}</td>
+              <td className={`${styles.numCol} ${styles.hideMobile}`}>{formatGd(row.goalDifference)}</td>
               <td className={styles.ptsCol}>{row.points}</td>
               <td className={styles.statusCol}>
                 {row.qualificationStatus && (
-                  <span className={`${styles.status} ${row.qualificationStatus === "Lolos" ? styles.success : styles.danger}`}>
+                  <span
+                    className={`${styles.status} ${
+                      row.qualificationStatus === "Lolos"
+                        ? styles.success
+                        : row.qualificationStatus === "Gugur"
+                        ? styles.danger
+                        : styles.pending || ""
+                    }`}
+                  >
                     {row.qualificationStatus}
                   </span>
                 )}

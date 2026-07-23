@@ -43,3 +43,13 @@
   background: var(--color-accent-blue, #38bdf8);
   color: #0f172a;
 }
+
+.desktopOnly {
+  display: inline-flex;
+}
+
+@media (max-width: 767px) {
+  .desktopOnly {
+    display: none !important;
+  }
+}

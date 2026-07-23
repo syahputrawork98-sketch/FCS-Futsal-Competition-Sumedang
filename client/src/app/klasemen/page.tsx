@@ -1,13 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import { PageContainer } from "@/components/layout/page-container/page-container";
 import { resolveStandingsPageData } from "@/features/standings/lib/resolve-standings-page";
-import { parseGroupQuery } from "@/features/standings/lib/standings-search-params";
-import { StandingsPage } from "@/features/standings/standings-page";
-
-type PageProps = {
-  searchParams: Promise<{ grup?: string | string[] }>;
-};
+import { ClientStandingsContainer } from "@/features/standings/client-standings-container";
+import { StandingsLoadingSkeleton } from "@/features/standings/components/standings-loading-skeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const rawSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
@@ -54,11 +50,8 @@ function getCanonicalKlasemenUrl(): string | undefined {
   return undefined;
 }
 
-export default async function KlasemenRoute({ searchParams }: PageProps) {
-  const { grup } = await searchParams;
-  const activeGroupId = parseGroupQuery(grup);
+export default function KlasemenRoute() {
   const standingsData = resolveStandingsPageData();
-
   const canonicalUrl = getCanonicalKlasemenUrl();
 
   let breadcrumbJsonLd: Record<string, unknown> | null = null;
@@ -98,7 +91,9 @@ export default async function KlasemenRoute({ searchParams }: PageProps) {
           dangerouslySetInnerHTML={{ __html: safeJsonLdString }}
         />
       )}
-      <StandingsPage data={standingsData} activeGroupId={activeGroupId} />
+      <Suspense fallback={<StandingsLoadingSkeleton />}>
+        <ClientStandingsContainer data={standingsData} />
+      </Suspense>
     </PageContainer>
   );
 }

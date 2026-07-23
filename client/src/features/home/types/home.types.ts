@@ -53,12 +53,12 @@ export type HomeBracketData = {
 };
 
 export type HomeStanding = {
-  position: number;
+  position: number | null;
   team: HomeTeam;
   played: number;
   goalDifference: number;
   points: number;
-  qualificationStatus?: "Lolos" | "Gugur";
+  qualificationStatus?: "Lolos" | "Gugur" | "Menunggu Keputusan" | "Pending";
 };
 
 export type HomeAward = {

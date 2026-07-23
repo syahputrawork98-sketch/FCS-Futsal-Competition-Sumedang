@@ -7,18 +7,35 @@ import styles from "./group-standings-section.module.css";
 
 type GroupStandingsSectionProps = {
   groupStandings: GroupStandings;
+  panelId?: string;
+  tabId?: string;
 };
 
-export function GroupStandingsSection({ groupStandings }: GroupStandingsSectionProps) {
-  const { group, rows, completedOfficialMatches, totalMatches } = groupStandings;
+export function GroupStandingsSection({ groupStandings, panelId, tabId }: GroupStandingsSectionProps) {
+  const { group, rows, completedOfficialMatches, totalMatches, status } = groupStandings;
+
+  const statusBadgeLabel =
+    status === "final"
+      ? "Final"
+      : status === "provisional"
+      ? "Sementara"
+      : status === "partial"
+      ? "Partial"
+      : "Belum Dimulai";
 
   return (
-    <section className={styles.section} aria-label={`Klasemen ${group.name}`}>
+    <section
+      id={panelId}
+      role="tabpanel"
+      aria-labelledby={tabId}
+      className={styles.section}
+      aria-label={`Klasemen ${group.name}`}
+    >
       <div className={styles.header}>
         <div className={styles.titleGroup}>
           <h2 className={styles.title}>{group.name}</h2>
           <span className={styles.subtitle}>
-            {rows.length} tim • {completedOfficialMatches}/{totalMatches} laga selesai
+            {rows.length} tim • {completedOfficialMatches}/{totalMatches} laga selesai • Status: {statusBadgeLabel}
           </span>
         </div>
         <Link
