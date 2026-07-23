@@ -3,10 +3,16 @@ import type {
   HomePlayer,
   HomeMatch,
   HomeAward,
+  HomeSectionState,
+  HomeStanding,
+  HomeBracketData,
+  HomeNews,
+  HomeGalleryItemWithSource,
+  HomeSponsor,
 } from "../types/home.types";
 
 const cakraTextile: HomeTeam = {
-  id: "team-cakra",
+  id: "TIM002",
   name: "Cakra Textile FC",
   group: "A",
   logo: { src: null, alt: "Logo Cakra Textile FC" },
@@ -14,14 +20,37 @@ const cakraTextile: HomeTeam = {
 };
 
 const tekmaFutsal: HomeTeam = {
-  id: "team-tekma",
+  id: "TIM007",
   name: "Tekma Futsal",
   group: "B",
   logo: { src: null, alt: "Logo Tekma Futsal" },
   achievement: "Runner-up",
 };
 
-export const homePrototypeData = {
+type HomePrototypeDataType = {
+  competition: HomeSectionState<{
+    name: string;
+    location: string;
+    date: string;
+    status: string;
+  }>;
+  champion: HomeSectionState<{
+    team: HomeTeam;
+  }>;
+  featuredFinal: HomeSectionState<HomeMatch>;
+  metrics: HomeSectionState<{ label: string; value: string }[]>;
+  latestResults: HomeSectionState<HomeMatch[]>;
+  standings: HomeSectionState<{ groupA: HomeStanding[]; groupB: HomeStanding[] }>;
+  bracket: HomeSectionState<HomeBracketData>;
+  awards: HomeSectionState<HomeAward[]>;
+  teams: HomeSectionState<HomeTeam[]>;
+  players: HomeSectionState<HomePlayer[]>;
+  news: HomeSectionState<HomeNews[]>;
+  gallery: HomeSectionState<HomeGalleryItemWithSource[]>;
+  sponsors: HomeSectionState<HomeSponsor[]>;
+};
+
+export const homePrototypeData: HomePrototypeDataType = {
   competition: {
     status: "ready",
     data: {
@@ -40,7 +69,7 @@ export const homePrototypeData = {
   featuredFinal: {
     status: "ready",
     data: {
-      id: "match-final",
+      id: "PRT016",
       phase: "Final",
       status: "Selesai",
       verificationStatus: "Resmi",
@@ -48,7 +77,7 @@ export const homePrototypeData = {
       awayTeam: tekmaFutsal,
       homeScore: 2,
       awayScore: 1,
-    } as HomeMatch,
+    },
   },
   metrics: {
     status: "ready",
@@ -63,7 +92,7 @@ export const homePrototypeData = {
     status: "ready",
     data: [
       {
-        id: "match-final",
+        id: "PRT016",
         phase: "Final",
         status: "Selesai",
         verificationStatus: "Resmi",
@@ -71,7 +100,7 @@ export const homePrototypeData = {
         awayTeam: tekmaFutsal,
         homeScore: 2,
         awayScore: 1,
-      } as HomeMatch,
+      },
     ],
   },
   standings: {
@@ -128,7 +157,7 @@ export const homePrototypeData = {
         image: { src: null, alt: "Logo Cakra Textile FC" },
         variant: "compact",
       },
-    ] as HomeAward[],
+    ],
   },
   teams: {
     status: "empty",
@@ -157,8 +186,8 @@ export const homePrototypeData = {
         position: "Kiper",
         photo: { src: null, alt: "Foto Aldi Setiawan" },
         award: "Kiper Terbaik",
-      }
-    ] as HomePlayer[],
+      },
+    ],
   },
   news: {
     status: "empty",
@@ -172,4 +201,4 @@ export const homePrototypeData = {
     status: "empty",
     message: "Sponsor belum tersedia.",
   },
-} as const;
+};

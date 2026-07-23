@@ -42,8 +42,8 @@ export function MatchResultCard({ match }: MatchResultCardProps) {
       </div>
 
       <div className={styles.footer}>
-        <ActionLink href={`/pertandingan/${match.id}`} variant="secondary" size="small">
-          Detail
+        <ActionLink href={`/pertandingan?q=${match.id}`} variant="secondary" size="small">
+          Lihat Pertandingan
         </ActionLink>
         <div className={styles.statusGroup}>
           <span className={styles.status}>{match.status}</span>

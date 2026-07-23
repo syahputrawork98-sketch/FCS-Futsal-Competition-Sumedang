@@ -1,0 +1,75 @@
+.tabContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2, 0.5rem);
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0.25rem;
+  border-radius: var(--radius-lg, 10px);
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.tabButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md, 8px);
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--color-text-muted, #94a3b8);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  outline: none;
+  position: relative;
+}
+
+.tabButton:hover {
+  color: var(--color-text-main, #ffffff);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tabButton:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-accent-blue, #38bdf8);
+}
+
+.activeTab {
+  color: #ffffff;
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Accessible non-color active indicator: bottom highlight bar */
+.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: var(--color-accent-blue, #38bdf8);
+  border-radius: 2px;
+}
+
+.tabCount {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.125rem 0.4375rem;
+  border-radius: var(--radius-full, 9999px);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.activeTab .tabCount {
+  background: rgba(56, 189, 248, 0.3);
+  color: #ffffff;
+}

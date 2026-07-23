@@ -35,10 +35,11 @@ export function MobileNavigation() {
     };
   }, [isOpen]);
 
-  // Close when pathname changes
-  useEffect(() => {
+  const [prevPathname, setPrevPathname] = useState(pathname);
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
     setIsOpen(false);
-  }, [pathname]);
+  }
 
   const isActive = (href?: string, matchPaths?: string[]) => {
     if (!pathname) return false;
