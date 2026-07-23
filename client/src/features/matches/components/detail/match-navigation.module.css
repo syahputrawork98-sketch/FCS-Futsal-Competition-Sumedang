@@ -1,0 +1,60 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4, 1rem);
+  padding-top: var(--space-4, 1rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--space-4, 1rem);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+  border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+}
+
+.labelRow {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-accent-amber, #f59e0b);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.labelRowRight {
+  justify-content: flex-end;
+}
+
+.teams {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--color-text-main, #ffffff);
+}
+
+.details {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted, #94a3b8);
+}
+
+.emptyCard {
+  visibility: hidden;
+}
+
+@media (max-width: 640px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}

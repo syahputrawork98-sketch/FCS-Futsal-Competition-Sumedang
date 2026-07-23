@@ -1,0 +1,37 @@
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5, 1.25rem);
+  width: 100%;
+}
+
+.box {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg, 12px);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.headerSkeleton {
+  height: 80px;
+}
+
+.scoreboardSkeleton {
+  height: 180px;
+}
+
+.metadataSkeleton {
+  height: 70px;
+}
+
+.contentSkeleton {
+  height: 240px;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

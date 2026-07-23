@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Clock, MapPin } from "lucide-react";
 import type { MatchRecord, MatchTeam, MatchPhase, MatchGroup, MatchVenue } from "../types/matches.types";
 import { formatMatchTime, getMatchStatusLabel, getResultStatusLabel } from "../lib/match-formatters";
@@ -118,10 +119,13 @@ export function MatchCard({
           )}
         </div>
 
-        {/* Directive 4: Non-interactive disabled badge for route detail */}
-        <span className={styles.detailUnavailableBadge}>
-          Detail segera tersedia
-        </span>
+        <Link
+          href={`/pertandingan/${match.id}`}
+          className={styles.detailActionLink}
+          aria-label={`Lihat detail pertandingan ${match.number}`}
+        >
+          Lihat Detail
+        </Link>
       </div>
     </article>
   );
